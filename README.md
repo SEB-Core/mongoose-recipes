@@ -4,7 +4,7 @@
 
 ## Description
 
-A short and quick application built to review what we have learned so far regarding Node/Express and Mongoose.
+In this codealong, we will build a full stack MEN application with full CRUD operations and user authentication.
 
 
 ## Getting Started
