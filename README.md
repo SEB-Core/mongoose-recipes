@@ -171,7 +171,7 @@ app.use(express.urlencoded({ extended: false }))
 Let's also set up a base route with a simple response.
 
 ```js
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Our app is connected . . . ')
 })
 ```
@@ -217,7 +217,7 @@ app.use(
   })
 )
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Our app is connected . . . ')
 })
 
@@ -2646,8 +2646,8 @@ app.use((req, res, next) => {
 Now, we'll set up our base route in `server.js` to render our `index.js`. This replaces our old `res.send`.
 
 ```js
-app.use('/', (req, res) => {
-  res.render('./index.ejs')
+app.get('/', (req, res) => {
+  res.render('index.ejs')
 })
 ```
 
