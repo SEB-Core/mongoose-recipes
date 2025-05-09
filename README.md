@@ -2601,8 +2601,15 @@ In the following sections, you can copy/paste the EJS from these snippets to the
     <nav>
       <a href="/">Home</a>
       <a href="/recipes">All Recipes</a>
+
+      <% if (!user) { %>
       <a href="/auth/sign-up">Sign Up</a>
       <a href="/auth/sign-in">Sign In</a>
+      <% } else { %>
+      <a href="/recipes/new">New Recipe</a>
+      <a href="/users/<%= user._id %>">My Profile</a>
+      <a href="/auth/sign-out">Sign Out</a>
+      <% } %>
     </nav>
     <main>
 ```
