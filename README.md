@@ -196,6 +196,8 @@ app.listen(PORT, () => {
 })
 ```
 
+<br>
+
 <details><summary>💡 Your <b>server.js</b> file should look like this so far . . . </summary>
 
 ```js
@@ -235,6 +237,8 @@ app.listen(PORT, () => {
 
 </details>
 
+<br>
+
 [📖 Back to Top](#-table-of-contents)
 
 ---
@@ -245,6 +249,8 @@ app.listen(PORT, () => {
 Now that our basic Express server is set up to run, we need to test it out.
 
 In our `package.json` file, let's add a script to run our server. There are two options for this - `nodemon` or `node --watch`:
+
+<br>
 
 <details><summary><b>nodemon</b></summary>
 
@@ -454,6 +460,8 @@ Finally, we simply export the Mongoose connection.
 module.exports = mongoose.connection
 ```
 
+<br>
+
 <details><summary>💡 Final <b>Mongoose Connection</b> file . . . </summary>
 
 ```js
@@ -594,6 +602,8 @@ module.exports = User
 
 Our model is now ready to be used to perform CRUD operations on our database!
 
+<br>
+
 <details>
 <summary>💡 Final <b>User</b> Model file . . . </summary>
 
@@ -679,6 +689,8 @@ module.exports = Recipe
 ```
 
 Our model is now ready to be used to perform CRUD operations on our database!
+
+<br>
 
 <details>
 <summary>💡 Final <b>Recipe</b> Model file . . . </summary>
@@ -920,6 +932,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Our <b>authController</b> file so far . . . </summary>
 
@@ -983,6 +997,8 @@ Below this, we need to export `router`.
 ```js
 module.exports = router
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>authRouter</b> file so far . . . </summary>
@@ -1129,6 +1145,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Final <b>signInUser</b> function . . . </summary>
 
@@ -1173,6 +1191,8 @@ In the route we left unfinished, reference the controller.
 ```js
 router.post('/sign-in', authController.signInUser)
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>authRouter</b> file so far . . . </summary>
@@ -1288,6 +1308,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Final <b>signOutUser</b> function . . . </summary>
 
@@ -1313,6 +1335,8 @@ In the route we left unfinished, reference the controller.
 ```js
 router.get('/sign-out', authController.signOutUser)
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>authRouter</b> file so far . . . </summary>
@@ -1483,6 +1507,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Our <b>userController</b> file so far . . . </summary>
 
@@ -1535,6 +1561,8 @@ Below this, we need to export `router`.
 ```js
 module.exports = router
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>userRouter</b> file so far . . . </summary>
@@ -1677,6 +1705,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Final <b>updatePassword</b> function . . . </summary>
 
@@ -1718,6 +1748,8 @@ In the route we left earlier, we'll reference the function!
 ```js
 router.put('/:id', authController.updatePassword)
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>authRouter</b> file so far . . . </summary>
@@ -1909,6 +1941,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Our <b>recipeController</b> file so far . . . </summary>
 
@@ -1959,6 +1993,8 @@ Below this, we need to export `router`.
 ```js
 module.exports = router
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>recipeRouter</b> file so far . . . </summary>
@@ -2078,6 +2114,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Our <b>getAllRecipes</b> function . . . </summary>
 
@@ -2105,6 +2143,8 @@ In the route from earlier, we reference the function:
 ```js
 router.get('/', recipeController.getAllRecipes)
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>recipeRouter</b> file so far . . . </summary>
@@ -2214,6 +2254,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Our <b>getRecipeById</b> function . . . </summary>
 
@@ -2240,6 +2282,8 @@ In the route from earlier, we reference the function:
 ```js
 router.get('/', recipeController.getRecipeById)
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>recipeRouter</b> file so far . . . </summary>
@@ -2364,6 +2408,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Our <b>updateRecipeById</b> function . . . </summary>
 
@@ -2391,6 +2437,8 @@ In the route from earlier, we reference the function:
 ```js
 router.put('/:id', recipeController.updateRecipeById)
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>recipeRouter</b> file so far . . . </summary>
@@ -2510,6 +2558,8 @@ module.exports = {
 }
 ```
 
+<br>
+
 <details>
 <summary>💡 Our <b>deleteRecipeById</b> function . . . </summary>
 
@@ -2537,6 +2587,8 @@ In the route from earlier, we reference the function:
 ```js
 router.delete('/:id', recipeController.deleteRecipeById)
 ```
+
+<br>
 
 <details>
 <summary>💡 Our <b>recipeRouter</b> file so far . . . </summary>
@@ -2635,6 +2687,8 @@ touch ./views/partials/header.ejs ./views/partials/footer.ejs
 
 In the following sections, you can copy/paste the EJS from these snippets to their respective files. Or, feel free to create your own!
 
+<br>
+
 <details>
 <summary>💡 <b>index.ejs</b></summary>
 
@@ -2693,6 +2747,8 @@ app.use((req, res, next) => {
 })
 ```
 
+<br>
+
 <details>
 <summary>💡 <b>footer.ejs</b></summary>
 
@@ -2739,6 +2795,8 @@ Then:
 ```sh
 touch ./views/auth/sign-up.ejs
 ```
+
+<br>
 
 <details>
 <summary>💡 <b>sign-up.ejs</b></summary>
@@ -2789,6 +2847,8 @@ Let's also make a page that thanks them for signing up:
 touch ./views/auth/thanks.ejs
 ```
 
+<br>
+
 <details>
 <summary>💡 <b>thanks.ejs</b></summary>
 
@@ -2824,6 +2884,8 @@ We also need a view to allow existing users to sign in.
 ```sh
 touch ./views/auth/sign-in.ejs
 ```
+
+<br>
 
 <details>
 <summary>💡 <b>sign-in.ejs</b></summary>
@@ -2878,6 +2940,8 @@ This page allows the user to update their password.
 touch ./views/auth/update-password.ejs
 ```
 
+<br>
+
 <details>
 <summary>💡 <b>update-password.ejs</b></summary>
 
@@ -2924,6 +2988,8 @@ Then, create the file:
 ```sh
 touch ./views/users/profile.ejs
 ```
+
+<br>
 
 <details>
 <summary>💡 <b>profile.ejs</b></summary>
@@ -2979,6 +3045,8 @@ We also need a page that confirms the password has been updated. We'll render it
 touch ./views/auth/confirm.ejs
 ```
 
+<br>
+
 <details>
 <summary>💡 <b>confirm.ejs</b></summary>
 
@@ -3010,6 +3078,8 @@ A list of all recipes in the app.
 ```sh
 touch ./views/recipes/all.ejs
 ```
+
+<br>
 
 <details>
 <summary>💡 <b>all.ejs</b></summary>
@@ -3052,6 +3122,8 @@ A detailed view of a single recipe.
 touch ./views/recipes/show.ejs
 ```
 
+<br>
+
 <details>
 <summary>💡 <b>show.ejs</b></summary>
 
@@ -3093,6 +3165,8 @@ We need a form where users can create new recipes.
 ```sh
 touch ./views/recipes/new.ejs
 ```
+
+<br>
 
 <details>
 <summary>💡 <b>new.ejs</b></summary>
@@ -3142,6 +3216,8 @@ A form to edit an existing recipe.
 ```sh
 touch ./views/recipes/edit.ejs
 ```
+
+<br>
 
 <details>
 <summary>💡 <b>edit.ejs</b></summary>
@@ -3196,6 +3272,8 @@ A page that confirms to the user that the recipe has been deleted.
 touch ./views/recipes/confirm.ejs
 ```
 
+<br>
+
 <details>
 <summary>💡 <b>confirm.ejs</b></summary>
 
@@ -3225,6 +3303,8 @@ res.render('./recipes/confirm.ejs')
 ## Styling (optional)
 
 Here is some styling that will work with the EJS pages we've done so far, but feel free to make your own!
+
+<br>
 
 <details>
 <summary>💡 <b>style.css</b></summary>
