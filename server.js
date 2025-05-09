@@ -31,7 +31,7 @@ app.use('/users', userRouter)
 app.use('/recipes', recipeRouter)
 
 app.use('/', (req, res) => {
-  res.send('Our app is connected . . . ')
+  res.render('./index.ejs')
 })
 
 app.listen(PORT, () => {

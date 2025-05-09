@@ -27,9 +27,12 @@ In this codealong, we will build a full stack MEN (Mongoose Express Node) applic
 - [Auth CRUD Functionality](#auth-crud-functionality)
 - [User CRUD Functionality](#user-crud-functionality)
 - [Recipe CRUD Functionality](#recipe-crud-functionality)
+- [Reflecting on the Server Build](#reflecting-on-the-server-build)
 - [Creating Our EJS Views](#creating-our-ejs-views)
 - [Styling (optional)](#styling-optional)
 - [Recap & Resources](#recap)
+
+![Req/Res Cycle](./images/req-res-cycle.png)
 
 
 ## Setting Up Our Node Environment
@@ -729,7 +732,7 @@ The pattern is:
 
 ![Pattern](./images/pattern.png)
 
-Creating and testing the EJS views will be done *after* we know all of our server functionality is working. In a real world application or your project, this same workflow should be followed. Planning, back-end, testing, *then* front-end, more testing.
+Creating and testing the EJS views will be done *after* we know all of our server functionality is working. In a real world application *or* your project, this same workflow should be followed. Planning, back-end, testing, *then* front-end, and more testing.
 
 [📖 Back to Top](#📖-table-of-contents)
 
@@ -2520,10 +2523,113 @@ The pattern once again shows us it's quality.
 [📖 Back to Top](#📖-table-of-contents)
 
 
+## Reflecting on the Server Build
+
+With this final operation, we have finished creating and testing our entire back-end server.  We have all the functionality we want for our website and the ability to interact with the database how we need.
+
+Now, as we move forward and create and test our "front-end" views, we will know that our server is complete. This allows us to more appropriately troubleshoot issues. By knowing that the issue must be coming from our EJS/HTML structure and/or our browser, we can more effectively track them down and solve the errors.
+
+This same mindset should be used in real world websites *and* your projects.
+
+![Oven](./images/oven.png)
+
+
 ## Creating Our EJS Views
+
+In this section, we will transition to the "front-end" / client-facing part of our website. We'll largely be copying/pasting EJS templates that will be given to you. As we do, we'll discuss and review each page and it's purpose. Then, we'll be setting up routes and controllers for each to ensure our pages are rendered/redirected appropriately.
+
+
+### Home Page & Partials
+
+Let's create a landing page for our website. Then, we'll set up our base route (`'/'`) to render the EJS file.
+
+First off, we need a `views` directory.
+
+```sh
+mkdir views
+```
+
+And create our `index.ejs` file.
+
+```sh
+touch ./views/index.ejs
+```
+
+Before we get to work in this file, we know we'll also need a few partials. One of these will be all of our head HTML and another will be the footer of every page. So let's create that directory and two files as well.
+
+```sh
+mkdir ./views/partials
+```
+
+```sh
+touch ./views/partials/header.ejs ./views/partials/footer.ejs
+```
+
+In the following sections, you can copy/paste the EJS from these snippets to their respective files. Or, feel free to create your own!
+
+<details>
+<summary>💡 <b>index.ejs</b></summary>
+
+```html
+<%- include('./partials/header.ejs') %>
+
+<h1>Mongoose Recipes</h1>
+
+<%- include('./partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+<details>
+<summary>💡 <b>header.ejs</b></summary>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mongoose Recipes</title>
+  </head>
+  <body>
+```
+
+</details>
+
+<br>
+
+<details>
+<summary>💡 <b>footer.ejs</b></summary>
+
+```html
+  </body>
+</html>
+```
+
+</details>
+
+<br>
+
+Now, we'll set up our base route in `server.js` to render our `index.js`. This replaces our old `res.send`.
+
+```js
+app.use('/', (req, res) => {
+  res.render('./index.ejs')
+})
+```
+
+When you open `'http://localhost:3000/'` in your browser you should see your home page.
+
+### 
 
 
 ## Styling (optional)
+
+
+
+
 
 
 ## Recap
@@ -2533,6 +2639,7 @@ In this lesson, we learned how to set up a Node/Express server from scratch, how
 
 ## 📚 Resources
 
+Documentation:
 - [Node Docs](https://nodejs.org/docs/latest/api/)
 - [Express Docs](https://expressjs.com/)
 - [Mongoose Docs](https://mongoosejs.com/docs/guide.html)
@@ -2541,6 +2648,8 @@ In this lesson, we learned how to set up a Node/Express server from scratch, how
 - [method-override](https://www.npmjs.com/package/method-override)
 - [express-session](https://www.npmjs.com/package/express-session)
 - [bcrypt](https://www.npmjs.com/package/bcrypt)
+
+ERD Tools:
 - [Canva](http://www.canva.com)
 - [Figma](https://www.figma.com)
 - [draw.io](https://app.diagrams.net/)
@@ -2549,3 +2658,16 @@ In this lesson, we learned how to set up a Node/Express server from scratch, how
 ![BFFs](./images/friends.png)
 
 [📖 Back to Top](#📖-table-of-contents)
+
+
+
+<details>
+<summary>💡 <b></b></summary>
+
+```html
+
+```
+
+</details>
+
+<br>
