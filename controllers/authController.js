@@ -22,8 +22,7 @@ const registerUser = async (req, res) => {
       picture: req.body.picture,
       recipes: []
     })
-    res.send(`Thanks for signing up, ${user.first}!`)
-    // This will be an EJS page later...
+    res.render('./auth/thanks.ejs', { user })
   } catch (error) {
     console.error('An error has occurred registering a user!', error.message)
   }
@@ -47,8 +46,7 @@ const signInUser = async (req, res) => {
       username: user.username,
       _id: user._id
     }
-    res.send(`Thanks for signing in, ${user.first}!`)
-    // This will be an EJS page or redirect later...
+    res.redirect(`/users/${user._id}`)
   } catch (error) {
     console.error('An error has occurred signing in a user!', error.message)
   }
@@ -78,8 +76,7 @@ const updatePassword = async (req, res) => {
     user.password = hashedPassword
     // It's critical that this field is updated with the password we hashed with bcrypt, and never the plain text password in req.body.password
     await user.save()
-    res.send(`Your password has been updated, ${user.first}!`)
-    // This will be an EJS page later...
+    res.render('./auth/confirm.ejs', { user })
   } catch (error) {
     console.error(
       "An error has occurred updating a user's password!",

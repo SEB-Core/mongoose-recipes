@@ -14,6 +14,8 @@ const db = require('./db')
 
 const app = express()
 
+app.use(express.static('public'))
+
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -25,13 +27,17 @@ app.use(
     saveUninitialized: true
   })
 )
+app.use((req, res, next) => {
+  res.locals.user = req.session.user
+  next()
+})
 
 app.use('/auth', authRouter)
 app.use('/users', userRouter)
 app.use('/recipes', recipeRouter)
 
-app.use('/', (req, res) => {
-  res.render('./index.ejs')
+app.get('/', (req, res) => {
+  res.render('index.ejs')
 })
 
 app.listen(PORT, () => {

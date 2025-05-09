@@ -2,7 +2,7 @@ const User = require('../models/User.js')
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id)
+    const user = await User.findById(req.params.id).populate('recipes')
     // Returns the full user object, including their hashed password. Never send this to anyone other than the user it belongs to.
     const data = {
       first: user.first,
@@ -11,10 +11,9 @@ const getUserById = async (req, res) => {
       recipes: user.recipes
     }
     // Notice we have left out sensitive info like the user's email and hashed password.
-    res.send(data)
-    // This will be an EJS page later...
+    res.render('./users/profile.ejs', { user: data })
   } catch (error) {
-    console.error("An error has occurred finding a user!", error.message)
+    console.error('An error has occurred finding a user!', error.message)
   }
 }
 

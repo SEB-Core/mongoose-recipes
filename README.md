@@ -1270,7 +1270,7 @@ Now, head back to our `authRouter.js` file and hook it up.
 In the route we left unfinished, reference the controller.
 
 ```js
-router.post('/sign-out', authController.signOutUser)
+router.get('/sign-out', authController.signOutUser)
 ```
 
 <details>
@@ -2531,6 +2531,8 @@ Now, as we move forward and create and test our "front-end" views, we will know 
 
 This same mindset should be used in real world websites *and* your projects.
 
+[📖 Back to Top](#📖-table-of-contents)
+
 ![Oven](./images/oven.png)
 
 
@@ -2573,7 +2575,8 @@ In the following sections, you can copy/paste the EJS from these snippets to the
 ```html
 <%- include('./partials/header.ejs') %>
 
-<h1>Mongoose Recipes</h1>
+<h1>Welcome to Mongoose Recipes!</h1>
+<p>Sign in or sign up to get started.</p>
 
 <%- include('./partials/footer.ejs') %>
 ```
@@ -2589,21 +2592,42 @@ In the following sections, you can copy/paste the EJS from these snippets to the
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mongoose Recipes</title>
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/recipes">All Recipes</a>
+      <a href="/auth/sign-up">Sign Up</a>
+      <a href="/auth/sign-in">Sign In</a>
+    </nav>
+    <main>
 ```
 
 </details>
 
 <br>
 
+For our header to be able to use the `session` object to conditionally render the nav, we need to set up a middleware in our `server.js`. Just under our middleware stack:
+
+```js
+app.use((req, res, next) => {
+  res.locals.user = req.session.user
+  next()
+})
+```
+
 <details>
 <summary>💡 <b>footer.ejs</b></summary>
 
 ```html
+    </main>
+    <footer>
+      <p>&copy; <%= new Date().getFullYear() %> Mongoose Recipes</p>
+    </footer>
   </body>
 </html>
 ```
@@ -2622,14 +2646,606 @@ app.use('/', (req, res) => {
 
 When you open `'http://localhost:3000/'` in your browser you should see your home page.
 
-### 
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Sign Up Page
+
+Let's allow users to sign up and create an account.
+
+In terminal:
+
+```sh
+mkdir ./views/auth
+```
+
+Then:
+
+```sh
+touch ./views/auth/sign-up.ejs
+```
+
+<details>
+<summary>💡 <b>sign-up.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>Sign Up</h2>
+<form action="/auth/sign-up" method="POST">
+  <input type="text" name="first" placeholder="First Name" required />
+  <input type="text" name="last" placeholder="Last Name" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <input type="text" name="picture" placeholder="Profile Picture URL" />
+  <input type="password" name="password" placeholder="Password" required />
+  <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
+  <button type="submit">Register</button>
+</form>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+Now, let's create a route to render this view.
+
+In `authRouter.js`:
+
+```js
+router.get('/sign-up', (req, res) => {
+  res.render('./auth/sign-up.ejs')
+})
+```
+
+No separate controller is needed in this case since it's a simple render route.
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Thank You Page
+
+Let's also make a page that thanks them for signing up:
+
+```sh
+touch ./views/auth/thanks.ejs
+```
+
+<details>
+<summary>💡 <b>thanks.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>Thanks for signing up, <%= user.first %>!</h2>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+In `authController.js`, we'll render this EJS page after the user registers.
+
+In `registerUser.js`, replace our `res.send` with this:
+
+```js
+res.render('./auth/thanks.ejs', { user })
+```
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Sign In Page
+
+We also need a view to allow existing users to sign in.
+
+```sh
+touch ./views/auth/sign-in.ejs
+```
+
+<details>
+<summary>💡 <b>sign-in.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>Sign In</h2>
+<form action="/auth/sign-in" method="POST">
+  <input type="email" name="email" placeholder="Email" required />
+  <input type="password" name="password" placeholder="Password" required />
+  <button type="submit">Sign In</button>
+</form>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+Then in `authRouter.js`, add:
+
+```js
+router.get('/sign-in', (req, res) => {
+  res.render('./auth/sign-in.ejs')
+})
+```
+
+No separate controller is needed in this case since it's a simple render route.
+
+After our user signs in, let's redirect them to their profile page which we'll set up later.
+
+In `authController.js`, in our `signInUser.js` controller, replace the `res.send` with this:
+
+```js
+res.redirect(`/users/${user._id}`)
+```
+
+This won't work yet, but we'll set it up soon.
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Update Password Page
+
+This page allows the user to update their password.
+
+```sh
+touch ./views/auth/update-password.ejs
+```
+
+<details>
+<summary>💡 <b>update-password.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>Update Password</h2>
+<form action="/auth/<%= user._id %>?_method=PUT" method="POST">
+  <input type="password" name="newPassword" placeholder="New Password" required />
+  <input type="password" name="confirmPassword" placeholder="Confirm New Password" required />
+  <button type="submit">Update</button>
+</form>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+In `authRouter.js`, render the route using our session object to grab the user info:
+
+```js
+router.get('/:id/update-password', (req, res) => {
+  res.render('./auth/update-password.ejs')
+})
+```
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### User Profile Page
+
+This page displays a user's profile info and their recipes.
+
+```sh
+mkdir ./views/users
+```
+
+Then, create the file:
+
+```sh
+touch ./views/users/profile.ejs
+```
+
+<details>
+<summary>💡 <b>profile.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2><%= user.first %> <%= user.last %>'s Profile</h2>
+<img src="<%= user.picture %>" alt="Profile Picture" width="150" />
+
+<div>
+  <a href=<%= `/auth/${user._id}/update-password` %>>Update Password</a>
+</div>
+
+<h3>Recipes:</h3>
+<ul>
+  <% user.recipes.forEach(recipe => { %>
+    <li><a href="/recipes/<%= recipe._id %>"><%= recipe.title %></a></li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+Back in our `userController.js`, we need to make sure we populate the recipes field when we get our user from the database.
+
+Add `.populate('recipes')` to the end of the query:
+
+```js
+const user = await User.findById(req.params.id).populate('recipes')
+```
+
+Then, replace the `res.send` with the following:
+
+```js
+res.render('./users/profile.ejs', { user })
+```
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Confirmed Page
+
+We also need a page that confirms the password has been updated. We'll render it after we update the password in the database.
+
+```sh
+touch ./views/auth/confirm.ejs
+```
+
+<details>
+<summary>💡 <b>confirm.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>Your password has been updated, <%= user.first %>!</h2>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+In our `authController.js` file, we need to replace the `res.send` in our `updatePassword` controller with:
+
+```js
+res.render('./auth/confirm.ejs', { user })
+```
+
+
+### All Recipes Page
+
+A list of all recipes in the app.
+
+```sh
+touch ./views/recipes/all.ejs
+```
+
+<details>
+<summary>💡 <b>all.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>All Recipes</h2>
+<ul>
+  <% recipes.forEach(recipe => { %>
+    <li>
+      <a href="/recipes/<%= recipe._id %>"><%= recipe.title %></a>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+Over in our `recipeController.js`, we need to replace the `res.send` in `getAllRecipes` with a render of our new page:
+
+```js
+res.render('./recipes/all.ejs', { recipes })
+```
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Show Recipe Page
+
+A detailed view of a single recipe.
+
+```sh
+touch ./views/recipes/show.ejs
+```
+
+<details>
+<summary>💡 <b>show.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2><%= recipe.title %></h2>
+<img src="<%= recipe.image %>" alt="<%= recipe.title %>" width="300" />
+<p><%= recipe.description %></p>
+
+<a href="/recipes/<%= recipe._id %>/edit">Edit</a>
+
+<form action="/recipes/<%= recipe._id %>?_method=DELETE" method="POST">
+  <button type="submit">Delete</button>
+</form>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+In `recipeController.js`, update the `res.send` in `getRecipeById` with:
+
+```js
+res.render('./recipes/show.ejs', { recipe })
+```
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### New Recipe Page
+
+We need a form where users can create new recipes.
+
+```sh
+touch ./views/recipes/new.ejs
+```
+
+<details>
+<summary>💡 <b>new.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>New Recipe</h2>
+<form action="/recipes" method="POST">
+  <input type="text" name="title" placeholder="Title" required />
+  <textarea name="description" placeholder="Description" required></textarea>
+  <input type="text" name="image" placeholder="Image URL" />
+  <input type="hidden" name="author" value="<%= user._id %>" />
+  <button type="submit">Create</button>
+</form>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+Route to render the form in `recipeRouter.js`. This needs to go above any `'/:id'` routes:
+
+```js
+router.get('/new', (req, res) => {
+  res.render('./recipes/new.ejs')
+})
+```
+
+After we create a new recipe, we need to redirect to the recipe details page. In our `recipeController.js` file, in `createRecipe`, replace the `res.send` with:
+
+```js
+res.redirect(`/recipes/${recipe._id}`)
+```
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Edit Recipe Page
+
+A form to edit an existing recipe.
+
+```sh
+touch ./views/recipes/edit.ejs
+```
+
+<details>
+<summary>💡 <b>edit.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>Edit Recipe</h2>
+<form action="/recipes/<%= recipe._id %>?_method=PUT" method="POST">
+  <input type="text" name="title" value="<%= recipe.title %>" required />
+  <textarea name="description" required><%= recipe.description %></textarea>
+  <input type="text" name="image" value="<%= recipe.image %>" />
+  <button type="submit">Update</button>
+</form>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+In `recipeRouter.js`, we need to import our `Recipe` model because we'll need the recipe details when we edit:
+
+```js
+const Recipe = require('../models/Recipe.js')
+```
+
+```js
+router.get('/:id/edit', async (req, res) => {
+  const recipe = await Recipe.findById(req.params.id)
+  res.render('./recipes/edit.ejs', { recipe })
+})
+```
+
+After we update the recipe, we need to redirect to the recipe details page. In our `recipeController.js` file, in `updateRecipeById`, replace the `res.send` with:
+
+```js
+res.redirect(`/recipes/${recipe._id}`)
+```
+
+[📖 Back to Top](#📖-table-of-contents)
+
+
+### Delete Recipe Confirm Page
+
+A page that confirms to the user that the recipe has been deleted.
+
+```sh
+touch ./views/recipes/confirm.ejs
+```
+
+<details>
+<summary>💡 <b>confirm.ejs</b></summary>
+
+```html
+<%- include('../partials/header.ejs') %>
+
+<h2>Your recipe has been deleted!</h2>
+
+<%- include('../partials/footer.ejs') %>
+```
+
+</details>
+
+<br>
+
+After we delete the recipe, we need to render the confirm page. In our `recipeController.js` file, in `deleteRecipeById`, replace the `res.send` with:
+
+```js
+res.render('./recipes/confirm.ejs')
+```
+
+[📖 Back to Top](#📖-table-of-contents)
 
 
 ## Styling (optional)
 
+Here is some styling that will work with the EJS pages we've done so far, but feel free to make your own!
 
+<details>
+<summary>💡 <b>style.css</b></summary>
 
+```css
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #f9f4ef;
+  color: #4b3f2f;
+  line-height: 1.6;
+}
+
+nav {
+  background-color: #d8b99c;
+  padding: 15px;
+  text-align: center;
+}
+
+nav a {
+  margin: 0 10px;
+  color: #4b3f2f;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px 20px;
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3 {
+  color: #5b4636;
+  margin-top: 0;
+  text-align: center;
+}
+
+form {
+  background: #fff8f0;
+  border: 1px solid #d3c0ae;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  width: 100%;
+  text-align: left;
+}
+
+form input,
+form textarea,
+form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  font-family: inherit;
+  border: 1px solid #bca98e;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #b98962;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #a36d4a;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  margin: 10px 0;
+  text-align: center;
+}
+
+footer {
+  background-color: #d8b99c;
+  text-align: center;
+  padding: 10px;
+  color: #4b3f2f;
+}
+```
+
+</details>
+
+<br>
+
+[📖 Back to Top](#📖-table-of-contents)
+
+![Let's Eat!](./images/eat.png)
 
 
 ## Recap
@@ -2655,19 +3271,6 @@ ERD Tools:
 - [draw.io](https://app.diagrams.net/)
 - [LucidChart](https://www.lucidchart.com/)
 
-![BFFs](./images/friends.png)
+![Done](./images/done.png)
 
 [📖 Back to Top](#📖-table-of-contents)
-
-
-
-<details>
-<summary>💡 <b></b></summary>
-
-```html
-
-```
-
-</details>
-
-<br>
