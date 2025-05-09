@@ -231,6 +231,7 @@ app.listen(PORT, () => {
 
 [📖 Back to Top](#-table-of-contents)
 
+---
 
 ### Running and Testing Our Server
 
@@ -283,6 +284,8 @@ For now, let's stop our server by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>.
 ## Connecting Our MongoDB Database
 
 
+---
+
 ### Environment Variables
 
 First, let's set up a file where we can hide secure information - a `.env` file.
@@ -306,6 +309,8 @@ Leave the `.env` file empty for now.
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Getting Our Connection String
 
 We need to allow our server to access our database on MongoDB Atlas. To do this, we will always need our secure connection string. 
@@ -326,6 +331,8 @@ Click the copy button to add the connection string to your clipboard. You do not
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Setting Up the **.env** File
 
@@ -362,6 +369,8 @@ Save your `.env` file. If you left your server running, you'll need to restart i
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Connecting to the Database
 
@@ -489,6 +498,8 @@ Successfully connected to MongoDB database . . .
 One of the things that Mongoose allows us to do is to set up templates or *schemas* for our MongoDB documents to follow. This ensures that each document is inserted in the database in a designated way, preventing errors. This takes a non-relational / noSQL database, and gives it many of the advantages of a relational / SQL database. It's the best of both worlds!
 
 
+---
+
 ### Mapping Our Application with an ERD
 
 ERD stands for **E**ntity **R**elationship **D**iagram. We use this as a way of planning our database structure and devising our models. In this app, we want to have Users that can sign up, sign in, and add many Recipes. So we'll need two models - **User** and **Recipe**. When making an ERD, think of the fields and datatypes you will need, as well as the relationships between your models. In this case, we'll establish a ***One to Many*** relationship. Here is the ERD we will need:
@@ -501,6 +512,8 @@ Now that we have our plan in place, let's start setting up our model files.
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Creating Our User Model
 
@@ -600,6 +613,8 @@ module.exports = User
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Creating Our Recipe Model
 
 We'll follow the same pattern for setting up our Recipe model. First, we need our file...
@@ -689,6 +704,8 @@ module.exports = Recipe
 ## Setting Up CRUD Operations
 
 
+---
+
 ### Folder Structure
 
 In order to keep our application organized and set up for future expansion and growth in functionality and scope, we will arrange our file structure in a certain way. 
@@ -719,6 +736,8 @@ This creates a separate route and controller file for **User**, **Recipe**, and 
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Following a Repeatable Pattern for Creating Each CRUD Operation
 
@@ -769,6 +788,8 @@ This tells our application that any endpoint that starts with `'http://localhost
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Registering a User
 
@@ -1001,6 +1022,8 @@ We've completed the process from *route* to *controller* to *testing*! Now, on t
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Signing In A User
 
 Now, back in `authRouter.js`, let's work on a new route.
@@ -1185,6 +1208,8 @@ We've completed the process again from *route* to *controller* to *testing*! Now
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Signing Out A User
 
 We can quickly set up our route and controller for signing out. Same pattern.
@@ -1349,6 +1374,8 @@ This tells our application that any endpoint that starts with `'http://localhost
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Getting a User's Profile
 
@@ -1532,6 +1559,8 @@ Again - *route* to *controller* to *testing*!
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Updating a User's Password
 
@@ -1763,6 +1792,8 @@ This tells our application that any endpoint that starts with `'http://localhost
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Creating a Recipe
 
 In order to set this up, we'll follow the pattern again. Route - Controller - Testing.
@@ -1960,6 +1991,8 @@ The pattern always works. Every time.
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Getting All Recipes
 
 Route - Controller - Testing. You know.
@@ -2094,6 +2127,8 @@ Follow. The. Pattern.
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Get a Single Recipe
 
 Route - Controller - Testing.
@@ -2227,6 +2262,8 @@ The pattern is a formula that will give you consistent success.
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Update a Recipe
 
@@ -2383,6 +2420,8 @@ What's for dinner? Mom's Famous Pattern.
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Delete a Recipe
 
@@ -2541,6 +2580,8 @@ This same mindset should be used in real world websites *and* your projects.
 In this section, we will transition to the "front-end" / client-facing part of our website. We'll largely be copying/pasting EJS templates that will be given to you. As we do, we'll discuss and review each page and it's purpose. Then, we'll be setting up routes and controllers for each to ensure our pages are rendered/redirected appropriately.
 
 
+---
+
 ### Home Page & Partials
 
 Let's create a landing page for our website. Then, we'll set up our base route (`'/'`) to render the EJS file.
@@ -2656,6 +2697,8 @@ When you open `'http://localhost:3000/'` in your browser you should see your hom
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Sign Up Page
 
 Let's allow users to sign up and create an account.
@@ -2711,6 +2754,8 @@ No separate controller is needed in this case since it's a simple render route.
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Thank You Page
 
 Let's also make a page that thanks them for signing up:
@@ -2744,6 +2789,8 @@ res.render('./auth/thanks.ejs', { user })
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Sign In Page
 
@@ -2796,6 +2843,8 @@ This won't work yet, but we'll set it up soon.
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Update Password Page
 
 This page allows the user to update their password.
@@ -2834,6 +2883,8 @@ router.get('/:id/update-password', (req, res) => {
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### User Profile Page
 
@@ -2893,6 +2944,8 @@ res.render('./users/profile.ejs', { user })
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Confirmed Page
 
 We also need a page that confirms the password has been updated. We'll render it after we update the password in the database.
@@ -2922,6 +2975,8 @@ In our `authController.js` file, we need to replace the `res.send` in our `updat
 res.render('./auth/confirm.ejs', { user })
 ```
 
+
+---
 
 ### All Recipes Page
 
@@ -2962,6 +3017,8 @@ res.render('./recipes/all.ejs', { recipes })
 [📖 Back to Top](#-table-of-contents)
 
 
+---
+
 ### Show Recipe Page
 
 A detailed view of a single recipe.
@@ -3001,6 +3058,8 @@ res.render('./recipes/show.ejs', { recipe })
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### New Recipe Page
 
@@ -3048,6 +3107,8 @@ res.redirect(`/recipes/${recipe._id}`)
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Edit Recipe Page
 
@@ -3099,6 +3160,8 @@ res.redirect(`/recipes/${recipe._id}`)
 
 [📖 Back to Top](#-table-of-contents)
 
+
+---
 
 ### Delete Recipe Confirm Page
 
