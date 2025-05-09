@@ -2793,7 +2793,7 @@ res.redirect(`/users/${user._id}`)
 
 This won't work yet, but we'll set it up soon.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Update Password Page
