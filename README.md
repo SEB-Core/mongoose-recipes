@@ -47,7 +47,7 @@ The `-y` ensures that `yes` is answered to all of the default setup questions.
 
 When this completes, we see a `package.json` file generated in our project directory. This is the "instructions" for our application. It contains important info, and eventually will contain a list of packages that are necessary for our app to run.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Installing Necessary Packages
@@ -71,7 +71,7 @@ Let's break each of these down:
 
 Once these installs complete, you should see them listed alongside their version numbers in the `"dependencies"` key of your `package.json` file.  A `node_modules` folder and a `package-lock.json` file will also be generated. 
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Ensuring Git Ignores Certain Files/Folders
@@ -93,7 +93,7 @@ package-lock.json
 
 ***ALWAYS put `/node_modules` in your gitignore. It is bad practice to push up these files. Putting your `package-lock.json` is an optional step.***
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Setting Up Our Express Server
@@ -229,7 +229,7 @@ app.listen(PORT, () => {
 
 </details>
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Running and Testing Our Server
@@ -277,7 +277,7 @@ The response you get should be `Our app is connected . . . `. We will eventually
 
 For now, let's stop our server by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Connecting Our MongoDB Database
@@ -303,7 +303,7 @@ package-lock.json
 
 Leave the `.env` file empty for now.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Getting Our Connection String
@@ -324,7 +324,7 @@ Click the copy button to add the connection string to your clipboard. You do not
 
 ![string](./images/string.png)
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Setting Up the **.env** File
@@ -360,7 +360,7 @@ This can be any string. Unpredictable and random is best.
 
 Save your `.env` file. If you left your server running, you'll need to restart it now. Your server always needs to restart after changes to the `.env` file.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Connecting to the Database
@@ -481,7 +481,7 @@ Running Server on Port 3000 . . .
 Successfully connected to MongoDB database . . .
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Creating Models with the Mongoose Schema Class
@@ -499,7 +499,7 @@ There are many different tools you can use for creating an ERD. This one was mad
 
 Now that we have our plan in place, let's start setting up our model files.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Creating Our User Model
@@ -597,7 +597,7 @@ module.exports = User
 
 <br>
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Creating Our Recipe Model
@@ -683,7 +683,7 @@ module.exports = Recipe
 
 <br>
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Setting Up CRUD Operations
@@ -717,7 +717,7 @@ This creates a separate route and controller file for **User**, **Recipe**, and 
 
 - The *controller files* will have all of the functions and their logic. This is where the actual querying of the database will occur.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Following a Repeatable Pattern for Creating Each CRUD Operation
@@ -734,7 +734,7 @@ The pattern is:
 
 Creating and testing the EJS views will be done *after* we know all of our server functionality is working. In a real world application *or* your project, this same workflow should be followed. Planning, back-end, testing, *then* front-end, and more testing.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 ![Prep](./images/prep.png)
 
@@ -767,7 +767,7 @@ app.use('/auth', authRouter)
 
 This tells our application that any endpoint that starts with `'http://localhost:3000/auth'` needs to go to our `authRouter` for further routing.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Registering a User
@@ -998,7 +998,7 @@ Later, this will be coming from our Form fields in our EJS.
 
 We've completed the process from *route* to *controller* to *testing*! Now, on to the next bit of functionality.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Signing In A User
@@ -1182,7 +1182,7 @@ Later, this will be coming from our Form fields in our EJS.
 
 We've completed the process again from *route* to *controller* to *testing*! Now, we go again!
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Signing Out A User
@@ -1312,7 +1312,7 @@ Now, we test with Insomnia or Postman - a `GET` request to `'http://localhost:30
 
 We've completed the process again from *route* to *controller* to *testing*! Don't stop now!
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ![Mixing](./images/mixing.png)
@@ -1347,7 +1347,7 @@ app.use('/users', userRouter)
 
 This tells our application that any endpoint that starts with `'http://localhost:3000/users'` needs to go to our `userRouter` for further routing.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Getting a User's Profile
@@ -1530,7 +1530,7 @@ Later, this will be coming from our route that we direct a user to when they cli
 
 Again - *route* to *controller* to *testing*!
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Updating a User's Password
@@ -1722,7 +1722,7 @@ Later, this will be coming from our Form fields in our EJS.
 
 Another round with the pattern - complete!
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ![Fridge Run](./images/fridge.png)
@@ -1760,7 +1760,7 @@ app.use('/recipes', recipeRouter)
 
 This tells our application that any endpoint that starts with `'http://localhost:3000/recipes'` needs to go to our `recipeRouter` for further routing.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Creating a Recipe
@@ -1957,7 +1957,7 @@ Later, this will be coming from our Form fields in our EJS.
 
 The pattern always works. Every time.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Getting All Recipes
@@ -2091,7 +2091,7 @@ Now, we test with Insomnia or Postman - a `GET` request to `'http://localhost:30
 
 Follow. The. Pattern.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Get a Single Recipe
@@ -2225,7 +2225,7 @@ Now, we test with Insomnia or Postman - a `GET` request to `'http://localhost:30
 
 The pattern is a formula that will give you consistent success.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Update a Recipe
@@ -2381,7 +2381,7 @@ Now, we test with Insomnia or Postman - a `PUT` request to `'http://localhost:30
 
 What's for dinner? Mom's Famous Pattern.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Delete a Recipe
@@ -2520,7 +2520,7 @@ Now, we test with Insomnia or Postman - a `DELETE` request to `'http://localhost
 
 The pattern once again shows us it's quality.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Reflecting on the Server Build
@@ -2531,7 +2531,7 @@ Now, as we move forward and create and test our "front-end" views, we will know 
 
 This same mindset should be used in real world websites *and* your projects.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 ![Oven](./images/oven.png)
 
@@ -2653,7 +2653,7 @@ app.get('/', (req, res) => {
 
 When you open `'http://localhost:3000/'` in your browser you should see your home page.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Sign Up Page
@@ -2708,7 +2708,7 @@ router.get('/sign-up', (req, res) => {
 
 No separate controller is needed in this case since it's a simple render route.
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Thank You Page
@@ -2742,7 +2742,7 @@ In `registerUser.js`, replace our `res.send` with this:
 res.render('./auth/thanks.ejs', { user })
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Sign In Page
@@ -2832,7 +2832,7 @@ router.get('/:id/update-password', (req, res) => {
 })
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### User Profile Page
@@ -2890,7 +2890,7 @@ Then, replace the `res.send` with the following:
 res.render('./users/profile.ejs', { user })
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Confirmed Page
@@ -2959,7 +2959,7 @@ Over in our `recipeController.js`, we need to replace the `res.send` in `getAllR
 res.render('./recipes/all.ejs', { recipes })
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Show Recipe Page
@@ -2999,7 +2999,7 @@ In `recipeController.js`, update the `res.send` in `getRecipeById` with:
 res.render('./recipes/show.ejs', { recipe })
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### New Recipe Page
@@ -3046,7 +3046,7 @@ After we create a new recipe, we need to redirect to the recipe details page. In
 res.redirect(`/recipes/${recipe._id}`)
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Edit Recipe Page
@@ -3097,7 +3097,7 @@ After we update the recipe, we need to redirect to the recipe details page. In o
 res.redirect(`/recipes/${recipe._id}`)
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ### Delete Recipe Confirm Page
@@ -3129,7 +3129,7 @@ After we delete the recipe, we need to render the confirm page. In our `recipeCo
 res.render('./recipes/confirm.ejs')
 ```
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 
 ## Styling (optional)
@@ -3250,7 +3250,7 @@ footer {
 
 <br>
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
 
 ![Let's Eat!](./images/eat.png)
 
@@ -3280,4 +3280,4 @@ ERD Tools:
 
 ![Done](./images/done.png)
 
-[📖 Back to Top](#📖-table-of-contents)
+[📖 Back to Top](#-table-of-contents)
