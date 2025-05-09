@@ -3432,6 +3432,8 @@ footer {
 
 In this lesson, we learned how to set up a Node/Express server from scratch, how to create new models using the Mongoose Schema class, and how to write simple functions to perform CRUD operations on our database.  As our Node/Express applications grow in scale and get more complex in structure, these core principles will remain the same.
 
+This is a BIG lesson, with lots of opportunities to make a mistake. So I've provided a [solution branch](https://github.com/NobodysLackey/mongoose-recipes/tree/solution) to this repository that you can clone down to see the final version.
+
 
 ## 📚 Resources
 
