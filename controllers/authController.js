@@ -43,7 +43,7 @@ const signInUser = async (req, res) => {
       // This will be also be an EJS page...
     }
     req.session.user = {
-      username: user.username,
+      email: user.email,
       _id: user._id
     }
     res.redirect(`/users/${user._id}`)
