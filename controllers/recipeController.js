@@ -19,7 +19,7 @@ const createRecipe = async (req, res) => {
 const getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipe.find({})
-    // findAll returns an array of every document that matches the criteria. In this case, our options object is empty (so there's no criteria).
+    // findAll returns an array of every document that matches the criteria. In this case, your options object is empty (so there's no criteria).
     res.render('./recipes/all.ejs', { recipes })
   } catch (error) {
     console.error('An error has occurred getting all recipes!', error.message)

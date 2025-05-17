@@ -82,7 +82,7 @@ const updatePassword = async (req, res) => {
     }
     const hashedPassword = bcrypt.hashSync(req.body.newPassword, 12)
     user.password = hashedPassword
-    // It's critical that this field is updated with the password we hashed with bcrypt, and never the plain text password in req.body.password
+    // It's critical that this field is updated with the password you hashed with bcrypt, and never the plain text password in req.body.password
     await user.save()
     res.render('./auth/confirm.ejs', { user })
   } catch (error) {

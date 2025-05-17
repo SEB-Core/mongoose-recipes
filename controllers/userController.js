@@ -11,7 +11,7 @@ const getUserById = async (req, res) => {
       picture: user.picture,
       recipes: user.recipes
     }
-    // Notice we have left out sensitive info like the user's email and hashed password.
+    // Notice you have left out sensitive info like the user's email and hashed password.
     res.render('./users/profile.ejs', { user: data })
   } catch (error) {
     console.error('An error has occurred finding a user!', error.message)
