@@ -586,7 +586,7 @@ Inside of this, you simply need to pass in a few options to set up your model. Y
 
 For your User model, let's reference your [ERD](#mapping-your-application-with-an-erd) (entity relationship diagram) to take note of the fields you'll need. Notice that the datatype options are capitalized.
 
-You'll *require* `first`, `last`, and `email`.
+You'll *require* `first`, `last`, `email`, and `password`.
 
 `{ timestamps: true }` as a secondary argument to `Schema` ensures that you receive `createdAt` and `updatedAt` fields when the document is created/updated in MongoDB.
 
