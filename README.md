@@ -566,7 +566,7 @@ In this folder, you'll create a file for the particular resource you want a sche
 touch ./models/User.js
 ```
 
-In this file, you'll need access to the mongoose object, so let's import that.
+In this file, you'll need access to the `mongoose` object, so let's import that.
 
 ```js
 const mongoose = require('mongoose')
@@ -586,7 +586,7 @@ Inside of this, you simply need to pass in a few options to set up your model. Y
 
 For your User model, let's reference your [ERD](#mapping-your-application-with-an-erd) (entity relationship diagram) to take note of the fields you'll need. Notice that the datatype options are capitalized.
 
-You'll *require* `first`, `last`, and `email`. You'll also make sure to set up your relationship to the Recipe model by making `recipes` an array of ObjectIDs.
+You'll *require* `first`, `last`, and `email`.
 
 `{ timestamps: true }` as a secondary argument to `Schema` ensures that you receive `createdAt` and `updatedAt` fields when the document is created/updated in MongoDB.
 
@@ -597,8 +597,7 @@ const userSchema = new mongoose.Schema(
     last: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    picture: { type: String },
-    recipes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recipe' }]
+    picture: { type: String }
   },
   { timestamps: true }
 )
@@ -634,8 +633,7 @@ const userSchema = new mongoose.Schema(
     last: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    picture: { type: String },
-    recipes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recipe' }]
+    picture: { type: String }
   },
   { timestamps: true }
 )
@@ -895,7 +893,7 @@ First, you'll check the database for the user:
 const userInDatabase = await User.findOne({ email: req.body.email })
 if (userInDatabase) {
   return res.send('Username already taken!')
-  // This will be an EJS page later...
+  // This can be an EJS page later...
 }
 ```
 
@@ -904,7 +902,7 @@ Now, to check the passwords:
 ```js
 if (req.body.password !== req.body.confirmPassword) {
   return res.send('Password and Confirm Password must match')
-  // This will be also be an EJS page...
+  // This can also be an EJS page...
 }
 ```
 
@@ -922,8 +920,7 @@ await User.create({
   password: hashedPassword,
   first: req.body.first,
   last: req.body.last,
-  picture: req.body.picture,
-  recipes: []
+  picture: req.body.picture
 })
 ```
 
@@ -931,7 +928,7 @@ Finally, sending a response:
 
 ```js
 res.send(`Thanks for signing up!`)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Don't forget to handle your errors:
@@ -965,11 +962,11 @@ const registerUser = async (req, res) => {
     const userInDatabase = await User.findOne({ email: req.body.email })
     if (userInDatabase) {
       return res.send('Username already taken!')
-      // This will be an EJS page later...
+      // This can be an EJS page later...
     }
     if (req.body.password !== req.body.confirmPassword) {
       return res.send('Password and Confirm Password must match')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     const hashedPassword = bcrypt.hashSync(req.body.password, 12)
     await User.create({
@@ -977,11 +974,10 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       first: req.body.first,
       last: req.body.last,
-      picture: req.body.picture,
-      recipes: []
+      picture: req.body.picture
     })
     res.send(`Thanks for signing up!`)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error('An error has occurred registering a user!', error.message)
   }
@@ -1111,7 +1107,7 @@ First, you'll check the database for the user:
 const user = await User.findOne({ email: req.body.email })
 if (!user) {
   return res.send('No user has been registered with that email. Please sign up!')
-  // This will be an EJS page later...
+  // This can be an EJS page later...
 }
 ```
 
@@ -1142,7 +1138,7 @@ Finally, sending a response:
 
 ```js
 res.send(`Thanks for signing in, ${user.first}!`)
-// This will be an EJS page or redirect later...
+// This can be an EJS page or redirect later...
 ```
 
 Don't forget to handle your errors:
@@ -1175,7 +1171,7 @@ const signInUser = async (req, res) => {
       return res.send(
         'No user has been registered with that email. Please sign up!'
       )
-      // This will be an EJS page later...
+      // This can be an EJS page later...
     }
     const validPassword = bcrypt.compareSync(
       req.body.password,
@@ -1183,14 +1179,14 @@ const signInUser = async (req, res) => {
     )
     if (!validPassword) {
       return res.send('Incorrect password! Please try again.')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     req.session.user = {
       email: user.email,
       _id: user._id
     }
     res.send(`Thanks for signing in, ${user.first}!`)
-    // This will be an EJS page or redirect later...
+    // This can be an EJS page or redirect later...
   } catch (error) {
     console.error('An error has occurred signing in a user!', error.message)
   }
@@ -1489,6 +1485,19 @@ const user = await User.findById(req.params.id)
 // Returns the full user object, including their hashed password. Never send this to anyone other than the user it belongs to.
 ```
 
+Next, you'll import your `Recipe` model so that you can find all recipes your user has made.
+
+```js
+const Recipe = require('../models/Recipe.js')
+```
+
+Now, you'll query that collection for all documents where the user's `_id` matches the `author` field on Recipe.
+
+```js
+const recipes = await Recipe.find({ author: user._id })
+// Returns all recipes where the author field is the same as the user object ID from above.
+```
+
 Now, to create a *new* object that only contains the data you want to send to the page:
 
 ```js
@@ -1497,16 +1506,17 @@ const data = {
   first: user.first,
   last: user.last,
   picture: user.picture,
-  recipes: user.recipes
+  recipes: recipes
 }
 // Notice you have left out sensitive info like the user's email and hashed password.
+// You have also added the recipes to the response.
 ```
 
 Now, to send it back as a response:
 
 ```js
 res.send(data)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Don't forget to handle your errors:
@@ -1537,16 +1547,19 @@ const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
     // Returns the full user object, including their hashed password. Never send this to anyone other than the user it belongs to.
+    const recipes = await Recipe.find({ author: user._id })
+    // Returns all recipes where the author field is the same as the user object ID from above.
     const data = {
       _id: user._id,
       first: user.first,
       last: user.last,
       picture: user.picture,
-      recipes: user.recipes
+      recipes: recipes
     }
     // Notice you have left out sensitive info like the user's email and hashed password.
+    // You have also added the recipes to the response.
     res.send(data)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error('An error has occurred finding a user!', error.message)
   }
@@ -1671,7 +1684,7 @@ First, you'll check the database for the user:
 const user = await User.findById(req.params.id)
 if (!user) {
   return res.send('No user with that ID exists!')
-  // This will be an EJS page later...
+  // This can be an EJS page later...
 }
 ```
 
@@ -1684,7 +1697,7 @@ const validPassword = bcrypt.compareSync(
 )
 if (!validPassword) {
   return res.send('Your old password was not correct! Please try again.')
-  // This will be also be an EJS page...
+  // This can also be an EJS page...
 }
 ```
 
@@ -1693,7 +1706,7 @@ Now, to check the user's new password:
 ```js
 if (req.body.newPassword !== req.body.confirmPassword) {
   return res.send('Password and Confirm Password must match')
-  // This will be also be an EJS page...
+  // This can also be an EJS page...
 }
 ```
 
@@ -1715,7 +1728,7 @@ Finally, sending a response:
 
 ```js
 res.send(`Your password has been updated, ${user.first}!`)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Don't forget to handle your errors:
@@ -1748,7 +1761,7 @@ const updatePassword = async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) {
       return res.send('No user with that ID exists!')
-      // This will be an EJS page later...
+      // This can be an EJS page later...
     }
     const validPassword = bcrypt.compareSync(
       req.body.oldPassword,
@@ -1756,18 +1769,18 @@ const updatePassword = async (req, res) => {
     )
     if (!validPassword) {
       return res.send('Your old password was not correct! Please try again.')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res.send('Password and Confirm Password must match')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     const hashedPassword = bcrypt.hashSync(req.body.newPassword, 12)
     user.password = hashedPassword
     // It's critical that this field is updated with the password you hashed with bcrypt, and never the plain text password in req.body.password
     await user.save()
     res.send(`Your password has been updated, ${user.first}!`)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error(
       "An error has occurred updating a user's password!",
@@ -1962,7 +1975,7 @@ Finally, you send a response:
 
 ```js
 res.send(recipe)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Don't forget to handle your errors:
@@ -1999,7 +2012,7 @@ const createRecipe = async (req, res) => {
     user.recipes.push(recipe._id)
     user.save()
     res.send(recipe)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error('An error has occurred creating a recipe!', error.message)
   }
@@ -2134,7 +2147,7 @@ Now, you send a response:
 
 ```js
 res.send(recipes)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Don't forget to handle your errors:
@@ -2165,7 +2178,7 @@ const getAllRecipes = async (req, res) => {
     const recipes = await Recipe.find({})
     // findAll returns an array of every document that matches the criteria. In this case, your options object is empty (so there's no criteria).
     res.send(recipes)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error('An error has occurred getting all recipes!', error.message)
   }
@@ -2273,7 +2286,7 @@ Now, you send a response:
 
 ```js
 res.send(recipe)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Don't forget to handle your errors:
@@ -2304,7 +2317,7 @@ const getRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id)
     res.send(recipe)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error('An error has occurred getting a recipe!', error.message)
   }
@@ -2426,7 +2439,7 @@ Now, you send a response:
 
 ```js
 res.send(recipe)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Don't forget to handle your errors:
@@ -2459,7 +2472,7 @@ const updateRecipeById = async (req, res) => {
     const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { new: true })
     // req.body overwrites any matching fields with the new values. Only the updated fields are necessary.
     res.send(recipe)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error('An error has occurred updating a recipe!', error.message)
   }
@@ -2576,7 +2589,7 @@ Send a response:
 
 ```js
 res.send(`Recipe with ID ${req.params.id} has been deleted successfully!`)
-// This will be an EJS page later...
+// This can be an EJS page later...
 ```
 
 Handle errors:
@@ -2609,7 +2622,7 @@ const deleteRecipeById = async (req, res) => {
     await Recipe.findByIdAndDelete(req.params.id)
     // No need to store this in a variable since it's being deleted
     res.send(`Recipe with ID ${req.params.id} has been deleted successfully!`)
-    // This will be an EJS page later...
+    // This can be an EJS page later...
   } catch (error) {
     console.error('An error has occurred deleting a recipe!', error.message)
   }
