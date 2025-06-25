@@ -7,11 +7,11 @@ const registerUser = async (req, res) => {
     const userInDatabase = await User.findOne({ email: req.body.email })
     if (userInDatabase) {
       return res.send('Username already taken!')
-      // This will be an EJS page later...
+      // This can be an EJS page later...
     }
     if (req.body.password !== req.body.confirmPassword) {
       return res.send('Password and Confirm Password must match')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     const hashedPassword = bcrypt.hashSync(req.body.password, 12)
     await User.create({
@@ -19,8 +19,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       first: req.body.first,
       last: req.body.last,
-      picture: req.body.picture,
-      recipes: []
+      picture: req.body.picture
     })
     res.render('./auth/thanks.ejs')
   } catch (error) {
@@ -35,12 +34,12 @@ const signInUser = async (req, res) => {
       return res.send(
         'No user has been registered with that email. Please sign up!'
       )
-      // This will be an EJS page later...
+      // This can be an EJS page later...
     }
     const validPassword = bcrypt.compareSync(req.body.password, user.password)
     if (!validPassword) {
       return res.send('Incorrect password! Please try again.')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     req.session.user = {
       email: user.email,
@@ -66,7 +65,7 @@ const updatePassword = async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) {
       return res.send('No user with that ID exists!')
-      // This will be an EJS page later...
+      // This can be an EJS page later...
     }
     const validPassword = bcrypt.compareSync(
       req.body.oldPassword,
@@ -74,11 +73,11 @@ const updatePassword = async (req, res) => {
     )
     if (!validPassword) {
       return res.send('Your old password was not correct! Please try again.')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res.send('Password and Confirm Password must match')
-      // This will be also be an EJS page...
+      // This can also be an EJS page...
     }
     const hashedPassword = bcrypt.hashSync(req.body.newPassword, 12)
     user.password = hashedPassword
