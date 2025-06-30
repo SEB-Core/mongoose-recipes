@@ -4,7 +4,7 @@ const User = require('../models/User.js')
 
 const registerUser = async (req, res) => {
   try {
-    const userInDatabase = await User.findOne({ email: req.body.email })
+    const userInDatabase = await User.exists({ email: req.body.email })
     if (userInDatabase) {
       return res.send('Username already taken!')
       // This can be an EJS page later...

@@ -96,6 +96,8 @@ Next, you'll need to make sure that things like your `node_modules` folder do no
 touch .gitignore
 ```
 
+This file should reside in the root of your project - same level as your `package.json`. 
+
 Anything you put in this file will not be tracked by git.
 
 For now, put:
@@ -105,7 +107,7 @@ For now, put:
 package-lock.json
 ```
 
-***ALWAYS put `/node_modules` in your gitignore. It is bad practice to push up these files. Putting your `package-lock.json` is an optional step sine it contains install information for your specific operating system.***
+***ALWAYS put `/node_modules` in your gitignore. It is bad practice to push up these files. Putting your `package-lock.json` is an optional step since it contains install information for your specific operating system.***
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -114,43 +116,43 @@ package-lock.json
 
 ## Setting Up Your Express Server
 
-You need a file to set up your Express server. By convention, you'll create a `server.js` file in the root of your repository.
+You need a file to set up your Express server in. By convention, you'll create a `server.js` file in the root of your repository.
 
 ```sh
 touch server.js
 ```
 
-In this file, you'll import the Express library.
+In this file, you'll require the Express library.
 
 ```js
 const express = require('express')
 ```
 
-You also will want to import and set up Morgan for logging.
+You also will want to require and set up Morgan for logging.
 
 ```js
 const logger = require('morgan')
 ```
 
-Next, you'll import Method Override. You'll need this later when you set up your forms.
+Next, you'll require Method Override. You'll need this later when you set up your forms.
 
 ```js
 const methodOverride = require('method-override')
 ```
 
-Because this app will have authentication, you will also need to set up Express Session.
+This app will have authentication, so you will also need to set up Express Session.
 
 ```js
 const session = require('express-session')
 ```
 
-Bring in `dotenv` so you can access your `.env` file.
+Require `dotenv` and immediately invoke the `.config()` method so you can access your `.env` file.
 
 ```js
 require('dotenv').config()
 ```
 
-Now that you've imported these libraries, you need to put them to use. Below your imports:
+Now that you've required these libraries, you need to put them to use. Below your requires:
 
 ```js
 const app = express()
@@ -192,7 +194,7 @@ app.get('/', (req, res) => {
 })
 ```
 
-Just under your imports, set up your `PORT` variable following real-world best practices...
+Just under your requires, set up your `PORT` variable following real-world best practices...
 
 ```js
 const PORT = process.env.PORT ? process.env.PORT : 3000
@@ -284,7 +286,7 @@ In your `package.json` file, let's add a script to run your server. There are tw
 
 <br>
 
-Both do the same thing, but `nodemon` requires another library to execute, while `node` already has the functionality built in. Whichever you choose is up to you.
+Both do the same thing, but `nodemon` requires an additional library to execute, while `node` already has the functionality built in. Whichever you choose is up to you.
 
 After your script is set up, you can run your server. In your terminal:
 
@@ -298,7 +300,7 @@ You should see:
 Running Server on Port 3000 . . . 
 ```
 
-Now let's make a request to `'http://localhost:3000/'` with Insomnia to test your base route.
+Now let's make a request to `'http://localhost:3000/'` with [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/downloads/) to test your base route.
 
 The response you get should be `Your app is connected . . . `. You will eventually replace this with your rendered EJS home page. This is just a test to make sure your server is set up properly.
 
@@ -324,6 +326,8 @@ In terminal:
 ```sh
 touch .env
 ```
+
+This file should reside in the root of your project - same level as your `package.json`.
 
 You definitely don't want to push this file to GitHub, so let's immediately add it to the bottom of your `.gitignore` file.
 
@@ -365,7 +369,7 @@ Skip past steps 1 & 2. On Step 3, click the copy button to add the connection st
 
 ### Setting Up the .env File
 
-You will take this string and paste it into your `.env` file under the variable name `MONGODB_URI`. Like this:
+You will take this string and paste it into your `.env` file under the variable name `MONGODB_URI`, by convention. Like this:
 
 ```txt
 MONGODB_URI=mongodb+srv://<your_username>:<db_password>@<cluster_name>.qscuy.azure.mongodb.net/<database-name>?retryWrites=true&w=majority&appName=cluster_name
@@ -392,7 +396,7 @@ Next, since you're already in your `.env`, you need to go ahead and set your `SE
 SESSION_SECRET=areallyrandomandlongstring
 ```
 
-This can be any string. Unpredictable and random is best.
+This can be any string. Unpredictable and random is best. It's the fact that only *you* have it that makes it secure.
 
 Save your `.env` file. If you left your server running, you'll need to restart it now. 
 
@@ -419,7 +423,7 @@ touch ./db/index.js
 
 You'll use this file to establish a connection to your database with `mongoose`.
 
-At the top of the file, you'll import `mongoose`.
+At the top of the file, you'll require `mongoose`.
 
 ```js
 const mongoose = require('mongoose')
@@ -502,9 +506,9 @@ module.exports = mongoose.connection
 
 <br>
 
-In order for this to occur when you run your server, you just need to require this file at the top of your `server.js`. This will run the file, and execute your `connect()` function.
+In order for this to occur when you run your server, you just need to require this file at the top of your `server.js`. This will run the file, and automatically execute your `connect()` function.
 
-In `server.js`, just below your other imports...
+In `server.js`, just below your other requires...
 
 ```js
 const db = require('./db')
@@ -566,7 +570,7 @@ In this folder, you'll create a file for the particular resource you want a sche
 touch ./models/User.js
 ```
 
-In this file, you'll need access to the `mongoose` object, so let's import that.
+In this file, you'll need access to the `mongoose` object, so let's require that.
 
 ```js
 const mongoose = require('mongoose')
@@ -584,7 +588,7 @@ The *new* keyword says to JavaScript that you want a brand new object generated 
 
 Inside of this, you simply need to pass in a few options to set up your model. You want to tell it the different key/value pairs you want and the datatypes that you expect them to be.
 
-For your User model, let's reference your [ERD](#mapping-your-application-with-an-erd) (entity relationship diagram) to take note of the fields you'll need. Notice that the datatype options are capitalized.
+For your User model, let's reference your [ERD](#mapping-your-application-with-an-erd) (**e**ntity **r**elationship **d**iagram) to take note of the fields you'll need. Notice that the datatype options are capitalized.
 
 You'll *require* `first`, `last`, `email`, and `password`.
 
@@ -603,7 +607,7 @@ const userSchema = new mongoose.Schema(
 )
 ```
 
-Then, you need to use Mongoose's model() method to turn your regular schema into a true model, giving it much more abilities! You do that with this line:
+Then, you need to use Mongoose's `.model()` method to turn your regular schema into a true model, giving it much more abilities! You do that with this line:
 
 ```js
 const User = mongoose.model('User', userSchema)
@@ -660,7 +664,7 @@ You'll follow the same pattern for setting up your Recipe model. First, you need
 touch ./models/Recipe.js
 ```
 
-In this file, you'll need access to the mongoose object, so let's import that again.
+In this file, you'll need access to the `mongoose` object, so let's require that again.
 
 ```js
 const mongoose = require('mongoose')
@@ -674,9 +678,9 @@ const recipeSchema = new mongoose.Schema({
 })
 ```
 
-For your Recipe model, let's reference your [ERD](#mapping-your-application-with-an-erd) (entity relationship diagram) again to take note of the fields you'll need.
+For your Recipe model, let's reference your [ERD](#mapping-your-application-with-an-erd) (**e**ntity **r**elationship **d**iagram) again to take note of the fields you'll need.
 
-You'll *require* `title`, `description`, and `author`. You'll also make sure to set up your relationship to the User model by making `author` an ObjectID.
+You'll *require* `title`, `description`, and `author`. You'll also make sure to set up your *relationship* to the `User` model by making `author` an ObjectID.
 
 You'll want `{ timestamps: true }` on these documents as well.
 
@@ -692,7 +696,7 @@ const recipeSchema = new mongoose.Schema(
 )
 ```
 
-Then, you need to use Mongoose's `.model()` method to turn your regular schema into a true model, giving it much more abilities! You do that with this line:
+Then, you need to use Mongoose's `.model()` method again to turn your regular schema into a true model. You do that with this line:
 
 ```js
 const Recipe = mongoose.model('Recipe', recipeSchema)
@@ -771,7 +775,7 @@ touch ./controllers/userController.js ./controllers/recipeController.js ./contro
 
 This creates a separate route and controller file for **User**, **Recipe**, and all of your **Auth** concerns.
 
-- The *route files* will have assigned URL endpoints and their associated controller functions.
+- The *route files* will have assigned URL endpoints and references to their associated controller functions.
 
 - The *controller files* will have all of the functions and their logic. This is where the actual querying of the database will occur.
 
@@ -792,7 +796,7 @@ The pattern is:
 
 ![Pattern](./images/pattern.png)
 
-Creating and testing the EJS views will be done *after* you know all of your server functionality is working. In a real world application *or* your project, this same workflow should be followed. Planning, back-end, testing, *then* front-end, and more testing.
+Creating and testing the EJS views should be done *after* you know all of your server functionality is working. In a real world application *or* your project, this same workflow should be followed. Planning, back-end, testing, *then* front-end, and more testing.
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -816,7 +820,7 @@ These are the full routes you will be setting up in this section:
 
 Let's head over to `server.js` and set up your base route (`'/auth'`) and link up your Router file.
 
-At the top, just below your package imports, you need to import your router from `authRouter.js`:
+At the top, just below your package requires, you need to require your router from `authRouter.js`:
 
 ```js
 const authRouter = require('./routes/authRouter.js')
@@ -837,7 +841,7 @@ This tells your application that any endpoint that starts with `'http://localhos
 
 ### Registering a User
 
-Now, over in `authRouter.js`, let's set everything up. First, import `express` and set up the `router` object.
+Now, over in `authRouter.js`, let's set everything up. First, require `express` and set up the `router` object.
 
 ```js
 const express = require('express')
@@ -850,13 +854,13 @@ Now, you'll set up the method (`POST`) with the `router` object and point to the
 router.post('/sign-up', )
 ```
 
-The second argument to `.post` will be your imported controller (which you have not made yet). You'll call it `registerUser`.
+The second argument to `.post` will be your required controller (which you have not made yet). You'll call it `registerUser`.
 
 Let's pause here with it half-complete and go set that up.
 
 In `authController.js`, you'll set up a bunch of functions for various functionality and export them.
 
-First, you need to import `bcrypt` since you will be using it to *hash* and later *compare* your user's passwords.
+First, you need to require `bcrypt` since you will be using it to *hash* and later *compare* your user's passwords.
 
 ```js
 const bcrypt = require('bcrypt')
@@ -880,7 +884,7 @@ const registerUser = async (req, res) => {
 }
 ```
 
-Following what you learned in the Session Auth lesson, you'll follow these steps:
+Following what you learned about Session Auth, you'll follow these steps:
 1. Check if a user exists with the provided email
 2. Make sure the user's passwords match
 3. Hash the user's password with `bcrypt`
@@ -890,7 +894,7 @@ Following what you learned in the Session Auth lesson, you'll follow these steps
 First, you'll check the database for the user:
 
 ```js
-const userInDatabase = await User.findOne({ email: req.body.email })
+const userInDatabase = await User.exists({ email: req.body.email })
 if (userInDatabase) {
   return res.send('Username already taken!')
   // This can be an EJS page later...
@@ -939,7 +943,7 @@ Don't forget to handle your errors:
 }
 ```
 
-At the bottom of your file, you'll create a module.exports that will export all of the functions you make.
+At the bottom of your file, you'll create a `module.exports` that will export all of the functions you make.
 
 ```js
 module.exports = {
@@ -959,7 +963,7 @@ const User = require('../models/User.js')
 
 const registerUser = async (req, res) => {
   try {
-    const userInDatabase = await User.findOne({ email: req.body.email })
+    const userInDatabase = await User.exists({ email: req.body.email })
     if (userInDatabase) {
       return res.send('Username already taken!')
       // This can be an EJS page later...
@@ -994,7 +998,7 @@ module.exports = {
 
 Now, head back to your `authRouter.js` file and you will hook everything up.
 
-At the top, import your controller.
+At the top, require your controller.
 
 ```js
 const authController = require('../controllers/authController.js')
@@ -3564,6 +3568,10 @@ ERD Tools:
 - [Figma](https://www.figma.com)
 - [draw.io](https://app.diagrams.net/)
 - [LucidChart](https://www.lucidchart.com/)
+
+Testing:
+- [Insomnia](https://insomnia.rest/)
+- [Postman](https://www.postman.com/downloads/)
 
 ![Michael & Patch Enjoy the Credits](./images/credits.gif)
 
