@@ -257,11 +257,17 @@ app.listen(PORT, () => {
 
 Now that your basic Express server is set up to run, you need to test it out.
 
-In your `package.json` file, let's add a script to run your server. There are two options for this - `nodemon` or `node --watch`:
-
-<br>
+In your `package.json` file, let's add a script to run your server. There are two options for this:
 
 <details><summary><b>nodemon</b></summary>
+
+`nodemon` is a dev tool that automatically restarts your server when it detects changes in your files. To use `nodemon`, you'll need to install it globally on your system (if you have not already):
+
+```sh
+npm install -g nodemon
+```
+
+Then, add this `start` script to your `package.json`:
 
 ```json
 "scripts": {
@@ -276,6 +282,10 @@ In your `package.json` file, let's add a script to run your server. There are tw
 
 <details><summary><b>node --watch</b></summary>
 
+`node --watch` is a built-in Node flag (as of version 18) that restarts your app when watched files change — similar to `nodemon`, but without having to install an extra dependency.
+
+To use, just add this `start` script to your `package.json`:
+
 ```json
 "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1",
@@ -286,7 +296,7 @@ In your `package.json` file, let's add a script to run your server. There are tw
 
 <br>
 
-Both do the same thing, but `nodemon` requires an additional library to execute, while `node` already has the functionality built in. Whichever you choose is up to you.
+Whichever you choose is up to you.
 
 After your script is set up, you can run your server. In your terminal:
 
