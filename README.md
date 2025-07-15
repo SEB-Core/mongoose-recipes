@@ -208,7 +208,7 @@ app.listen(PORT, () => {
 })
 ```
 
----
+· · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>server.js</b> file should look like this so far . . . </summary>
@@ -249,7 +249,7 @@ app.listen(PORT, () => {
 
 </details>
 
----
+· · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
