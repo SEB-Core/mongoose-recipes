@@ -393,14 +393,35 @@ MONGODB_URI=mongodb+srv://<your_username>:<db_password>@<cluster_name>.qscuy.azu
 
 Yours may look completely different than the example above due to the host and region you selected on setup, and that is fine. After pasting your connection string, you need to replace `<db_password>` with *your* database password. Replace the `< >` as well.
 
-A few of the query parameters at the end are not completely necessary and can be removed also.
+There are a few query parameters at the end of the connection string. Each serves a unique purpose. Let's break them down and discuss.
+
+```txt
+?retryWrites=true
+```
+
+This first query parameter tells MongoDB to automatically retry write operations (like insert, update, delete) *once* if they fail due to an error like a dropped connection.
+
+This is recommended to **keep**.
 
 ```txt
 &w=majority
+```
+
+When MongoDB saves our data, it does so on multiple servers to ensure data is not lost. `w=majority` tells MongoDB not to return a *success code* until a **majority** of these servers have successfully received this data.
+
+This is best to **keep** for production code.
+
+```txt
 &appName=cluster_name
 ```
 
-Now you need to name your new database. In the connection string, right after `mongodb.net/` but before the `?`, write the name of the database you are building.
+This is just a label for your connection in logs/monitoring tools.
+
+You can **keep** it and name it whatever you want or **remove** it. 
+
+<br>
+
+Now, you need to name your new database. In the connection string, right after `mongodb.net/` but before the `?`, write the name of the database you are building.
 
 For this app, you'll say `mongoose-recipes`. 
 
@@ -3573,12 +3594,12 @@ Documentation:
 - [Node Docs](https://nodejs.org/docs/latest/api/)
 - [Express Docs](https://expressjs.com/)
 - [Mongoose Docs](https://mongoosejs.com/docs/guide.html)
-- [nodemon](https://www.npmjs.com/package/nodemon)
 - [morgan](https://www.npmjs.com/package/morgan)
 - [dotenv](https://www.npmjs.com/package/dotenv)
 - [method-override](https://www.npmjs.com/package/method-override)
 - [express-session](https://www.npmjs.com/package/express-session)
 - [bcrypt](https://www.npmjs.com/package/bcrypt)
+- [nodemon](https://www.npmjs.com/package/nodemon)
 
 ERD Tools:
 - [Canva](http://www.canva.com)
