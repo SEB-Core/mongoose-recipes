@@ -208,7 +208,7 @@ app.listen(PORT, () => {
 })
 ```
 
-· · · · · · · · ·
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>server.js</b> file should look like this so far . . . </summary>
@@ -249,7 +249,7 @@ app.listen(PORT, () => {
 
 </details>
 
-· · · · · · · · ·
+· · · · · · · · · · · · · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -262,7 +262,7 @@ Now that your basic Express server is set up to run, you need to test it out.
 
 In your `package.json` file, let's add a script to run your server. There are two options for this:
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary> 🪛 <b>nodemon</b></summary>
@@ -286,7 +286,7 @@ Then, add this `start` script to your `package.json`:
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>🪛 <b>node --watch</b></summary>
@@ -305,7 +305,7 @@ To use, just add this `start` script to your `package.json`:
 ```
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Whichever you choose is up to you.
 
@@ -400,7 +400,7 @@ Yours may look completely different than the example above due to the host and r
 
 There are a few query parameters at the end of the connection string. Each serves a unique purpose. 
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary> 🪛 A breakdown of each <b>query parameter</b> . . . </summary>
@@ -433,7 +433,7 @@ You can **keep** it and name it whatever you want or **remove** it.
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, you need to name your new database. In the connection string, right after `mongodb.net/` but before the `?`, write the name of the database you are building.
 
@@ -531,7 +531,7 @@ Finally, you simply export the Mongoose connection.
 module.exports = mongoose.connection
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details><summary>💡 Final <b>Mongoose Connection</b> file . . . </summary>
 
@@ -557,7 +557,7 @@ module.exports = mongoose.connection
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 In order for this to occur when you run your server, you just need to require this file at the top of your `server.js`. This will run the file, and automatically execute your `connect()` function.
 
@@ -676,7 +676,7 @@ module.exports = User
 
 Your model is now ready to be used to perform CRUD operations on your database!
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Final <b>User</b> Model file . . . </summary>
@@ -704,7 +704,7 @@ module.exports = User
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
