@@ -210,6 +210,8 @@ app.listen(PORT, () => {
 
 <br>
 
+---
+
 <details><summary>💡 Your <b>server.js</b> file should look like this so far . . . </summary>
 
 ```js
@@ -245,6 +247,8 @@ app.listen(PORT, () => {
 ```
 
 </details>
+
+---
 
 <br>
 
@@ -395,10 +399,10 @@ Yours may look completely different than the example above due to the host and r
 
 There are a few query parameters at the end of the connection string. Each serves a unique purpose. 
 
-<hr>
+---
 
 <details>
-<summary> 🪛 A breakdown of each query param . . . </summary>
+<summary> 🪛 A breakdown of each <b>query parameter</b> . . . </summary>
 
 <br>
 
@@ -428,7 +432,7 @@ You can **keep** it and name it whatever you want or **remove** it.
 
 </details>
 
-<hr>
+---
 
 Now, you need to name your new database. In the connection string, right after `mongodb.net/` but before the `?`, write the name of the database you are building.
 
@@ -528,6 +532,8 @@ module.exports = mongoose.connection
 
 <br>
 
+---
+
 <details><summary>💡 Final <b>Mongoose Connection</b> file . . . </summary>
 
 ```js
@@ -549,6 +555,8 @@ module.exports = mongoose.connection
 ```
 
 </details>
+
+---
 
 <br>
 
