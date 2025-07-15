@@ -265,7 +265,7 @@ In your `package.json` file, let's add a script to run your server. There are tw
 
 <br>
 
-`nodemon` is a dev tool that automatically restarts your server when it detects changes in your files. To use `nodemon`, you'll need to install it globally on your system (if you have not already):
+[nodemon](https://www.npmjs.com/package/nodemon) is a dev tool that automatically restarts your server when it detects changes in your files. To use `nodemon`, it's best to install it globally on your system (if you have not already):
 
 ```sh
 npm install -g nodemon
@@ -3573,6 +3573,7 @@ Documentation:
 - [Node Docs](https://nodejs.org/docs/latest/api/)
 - [Express Docs](https://expressjs.com/)
 - [Mongoose Docs](https://mongoosejs.com/docs/guide.html)
+- [nodemon](https://www.npmjs.com/package/nodemon)
 - [morgan](https://www.npmjs.com/package/morgan)
 - [dotenv](https://www.npmjs.com/package/dotenv)
 - [method-override](https://www.npmjs.com/package/method-override)
