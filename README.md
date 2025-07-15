@@ -393,10 +393,15 @@ MONGODB_URI=mongodb+srv://<your_username>:<db_password>@<cluster_name>.qscuy.azu
 
 Yours may look completely different than the example above due to the host and region you selected on setup, and that is fine. After pasting your connection string, you need to replace `<db_password>` with *your* database password. Replace the `< >` as well.
 
-There are a few query parameters at the end of the connection string. Each serves a unique purpose. Let's break them down and discuss.
+There are a few query parameters at the end of the connection string. Each serves a unique purpose. 
+
+<details>
+<summary> 🪛 A breakdown of each query param . . . </summary>
+
+<br>
 
 ```txt
-?retryWrites=true
+retryWrites=true
 ```
 
 This first query parameter tells MongoDB to automatically retry write operations (like insert, update, delete) *once* if they fail due to an error like a dropped connection.
@@ -404,7 +409,7 @@ This first query parameter tells MongoDB to automatically retry write operations
 This is recommended to **keep**.
 
 ```txt
-&w=majority
+w=majority
 ```
 
 When MongoDB saves our data, it does so on multiple servers to ensure data is not lost. `w=majority` tells MongoDB not to return a *success code* until a **majority** of these servers have successfully received this data.
@@ -412,12 +417,14 @@ When MongoDB saves our data, it does so on multiple servers to ensure data is no
 This is best to **keep** for production code.
 
 ```txt
-&appName=cluster_name
+appName=cluster_name
 ```
 
 This is just a label for your connection in logs/monitoring tools.
 
-You can **keep** it and name it whatever you want or **remove** it. 
+You can **keep** it and name it whatever you want or **remove** it.
+
+</details>
 
 <br>
 
