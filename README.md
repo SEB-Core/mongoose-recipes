@@ -208,7 +208,7 @@ app.listen(PORT, () => {
 })
 ```
 
-____________________
+#
 
 <details>
 <summary>💡 Your <b>server.js</b> file should look like this so far . . . </summary>
@@ -249,7 +249,7 @@ app.listen(PORT, () => {
 
 </details>
 
-____________________
+#
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -333,9 +333,6 @@ For now, let's stop your server by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>.
 
 
 ## Connecting Your MongoDB Database
-
-
----
 
 
 ### Environment Variables
@@ -676,7 +673,7 @@ module.exports = User
 
 Your model is now ready to be used to perform CRUD operations on your database!
 
-____________________
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Final <b>User</b> Model file . . . </summary>
@@ -704,7 +701,7 @@ module.exports = User
 
 </details>
 
-____________________
+· · · · · · · · · · · · · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
