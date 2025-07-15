@@ -395,7 +395,7 @@ Yours may look completely different than the example above due to the host and r
 
 There are a few query parameters at the end of the connection string. Each serves a unique purpose. 
 
-<br><hr>
+<hr>
 
 <details>
 <summary> 🪛 A breakdown of each query param . . . </summary>
