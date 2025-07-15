@@ -395,6 +395,8 @@ Yours may look completely different than the example above due to the host and r
 
 There are a few query parameters at the end of the connection string. Each serves a unique purpose. 
 
+<br><hr>
+
 <details>
 <summary> 🪛 A breakdown of each query param . . . </summary>
 
@@ -426,6 +428,7 @@ You can **keep** it and name it whatever you want or **remove** it.
 
 </details>
 
+<hr>
 <br>
 
 Now, you need to name your new database. In the connection string, right after `mongodb.net/` but before the `?`, write the name of the database you are building.
