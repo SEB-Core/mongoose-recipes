@@ -429,7 +429,6 @@ You can **keep** it and name it whatever you want or **remove** it.
 </details>
 
 <hr>
-<br>
 
 Now, you need to name your new database. In the connection string, right after `mongodb.net/` but before the `?`, write the name of the database you are building.
 
