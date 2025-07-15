@@ -530,8 +530,6 @@ Finally, you simply export the Mongoose connection.
 module.exports = mongoose.connection
 ```
 
-<br>
-
 ---
 
 <details><summary>💡 Final <b>Mongoose Connection</b> file . . . </summary>
@@ -557,8 +555,6 @@ module.exports = mongoose.connection
 </details>
 
 ---
-
-<br>
 
 In order for this to occur when you run your server, you just need to require this file at the top of your `server.js`. This will run the file, and automatically execute your `connect()` function.
 
