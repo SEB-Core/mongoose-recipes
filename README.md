@@ -259,7 +259,11 @@ Now that your basic Express server is set up to run, you need to test it out.
 
 In your `package.json` file, let's add a script to run your server. There are two options for this:
 
+<br>
+
 <details><summary><b>nodemon</b></summary>
+
+<br>
 
 `nodemon` is a dev tool that automatically restarts your server when it detects changes in your files. To use `nodemon`, you'll need to install it globally on your system (if you have not already):
 
@@ -281,6 +285,8 @@ Then, add this `start` script to your `package.json`:
 <br>
 
 <details><summary><b>node --watch</b></summary>
+
+<br>
 
 `node --watch` is a built-in Node flag (as of version 18) that restarts your app when watched files change — similar to `nodemon`, but without having to install an extra dependency.
 
