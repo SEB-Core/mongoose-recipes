@@ -269,7 +269,7 @@ In your `package.json` file, let's add a script to run your server. There are tw
 
 <br>
 
-[nodemon](https://www.npmjs.com/package/nodemon) is a dev tool that automatically restarts your server when it detects changes in your files. To use `nodemon`, it's best to install it globally on your system (if you have not already):
+The npm package [nodemon](https://www.npmjs.com/package/nodemon) is a dev tool that automatically restarts your server when it detects changes in your files. To use `nodemon`, it's best to install it globally on your system (if you have not already):
 
 ```sh
 npm install -g nodemon
@@ -283,6 +283,8 @@ Then, add this `start` script to your `package.json`:
   "start": "nodemon server.js"
 },
 ```
+
+If you choose to use `nodemon`, you don't even technically have to use this "start" script. You can simply run `nodemon` in your terminal and it will automatically run your server file!
 
 </details>
 
@@ -471,92 +473,19 @@ touch ./db/index.js
 
 You'll use this file to establish a connection to your database with `mongoose`.
 
-At the top of the file, you'll require `mongoose`.
-
 ```js
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
+
+mongoose.connect(process.env.MONGODB_URI)
+
+mongoose.connection.on("connected", () => {
+  console.log(`Successfully connected to MongoDB database . . .`)
+})
+
+module.exports = mongoose
 ```
 
-You also need to bring in `dotenv` to allow you to extract and utilize your database connection string. You can require it and immediately invoke the `config()` method. No need to store it in a variable.
-
-```js
-require('dotenv').config()
-```
-
-Now, let's set up an *asynchronous* function to attempt connection with your database.
-
-```js
-const connect = async () => {
-
-}
-```
-
-In this function, you want to set up a `try/catch` block to properly handle any errors that might occur during connection.
-
-```js
-const connect = async () => {
-  try {
-
-  } catch (error) {
-
-  }
-}
-```
-
-You'll use Mongoose's built in `connect` method to establish your connection and then `console.log` the success. In the catch block, you'll simply `console.error` any errors that occur.
-
-```js
-const connect = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI)
-    console.log('Successfully connected to MongoDB database . . .')
-  } catch (error) {
-    console.error('Connection Error!', error.message)
-  }
-}
-```
-
-Now, you invoke the function you made:
-
-```js
-connect()
-```
-
-Finally, you simply export the Mongoose connection.
-
-```js
-module.exports = mongoose.connection
-```
-
-· · · · · · · · · · · · · · · · · · · ·
-
-<details><summary>💡 Final <b>Mongoose Connection</b> file . . . </summary>
-
-<br>
-
-```js
-const mongoose = require('mongoose')
-require('dotenv').config()
-
-const connect = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI)
-    console.log('Successfully connected to MongoDB database . . .')
-  } catch (error) {
-    console.error('Connection Error!', error.message)
-  }
-}
-
-connect()
-
-module.exports = mongoose.connection
-```
-
-</details>
-
-· · · · · · · · · · · · · · · · · · · ·
-
-In order for this to occur when you run your server, you just need to require this file at the top of your `server.js`. This will run the file, and automatically execute your `connect()` function.
+In order for this to occur when you run your server, you just need to require this file at the top of your `server.js`. This will run the file, and automatically execute your mongoose connection.
 
 In `server.js`, just below your other requires...
 
