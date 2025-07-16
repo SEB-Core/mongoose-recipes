@@ -803,8 +803,6 @@ module.exports = Recipe
 ## Setting Up CRUD Operations
 
 
----
-
 ### Folder Structure
 
 In order to keep your application organized and set up for future expansion and growth in functionality and scope, you will arrange your file structure in a certain way. 
@@ -3248,6 +3246,7 @@ In your `authController.js` file, you need to replace the `res.send` in your `up
 res.render('./auth/confirm.ejs', { user })
 ```
 
+[📖 Back to Top](#-table-of-contents)
 
 ---
 
