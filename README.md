@@ -208,7 +208,7 @@ app.listen(PORT, () => {
 })
 ```
 
-· · · · · · · · ·
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>server.js</b> file should look like this so far . . . </summary>
@@ -249,7 +249,7 @@ app.listen(PORT, () => {
 
 </details>
 
-· · · · · · · · ·
+· · · · · · · · · · · · · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -262,7 +262,7 @@ Now that your basic Express server is set up to run, you need to test it out.
 
 In your `package.json` file, let's add a script to run your server. There are two options for this:
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary> 🪛 <b>nodemon</b></summary>
@@ -286,7 +286,7 @@ Then, add this `start` script to your `package.json`:
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>🪛 <b>node --watch</b></summary>
@@ -305,7 +305,7 @@ To use, just add this `start` script to your `package.json`:
 ```
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Whichever you choose is up to you.
 
@@ -333,9 +333,6 @@ For now, let's stop your server by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>.
 
 
 ## Connecting Your MongoDB Database
-
-
----
 
 
 ### Environment Variables
@@ -400,7 +397,7 @@ Yours may look completely different than the example above due to the host and r
 
 There are a few query parameters at the end of the connection string. Each serves a unique purpose. 
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary> 🪛 A breakdown of each <b>query parameter</b> . . . </summary>
@@ -433,7 +430,7 @@ You can **keep** it and name it whatever you want or **remove** it.
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, you need to name your new database. In the connection string, right after `mongodb.net/` but before the `?`, write the name of the database you are building.
 
@@ -531,7 +528,7 @@ Finally, you simply export the Mongoose connection.
 module.exports = mongoose.connection
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details><summary>💡 Final <b>Mongoose Connection</b> file . . . </summary>
 
@@ -557,7 +554,7 @@ module.exports = mongoose.connection
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 In order for this to occur when you run your server, you just need to require this file at the top of your `server.js`. This will run the file, and automatically execute your `connect()` function.
 
@@ -676,7 +673,7 @@ module.exports = User
 
 Your model is now ready to be used to perform CRUD operations on your database!
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Final <b>User</b> Model file . . . </summary>
@@ -704,7 +701,7 @@ module.exports = User
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -765,7 +762,7 @@ module.exports = Recipe
 
 Your model is now ready to be used to perform CRUD operations on your database!
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Final <b>Recipe</b> Model file . . . </summary>
@@ -796,7 +793,7 @@ module.exports = Recipe
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -1008,7 +1005,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>authController</b> file so far . . . </summary>
@@ -1053,7 +1050,7 @@ module.exports = {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `authRouter.js` file and you will hook everything up.
 
@@ -1075,7 +1072,7 @@ Below this, you need to export `router`.
 module.exports = router
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>authRouter</b> file so far . . . </summary>
@@ -1095,7 +1092,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -1223,7 +1220,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Final <b>signInUser</b> function . . . </summary>
@@ -1262,7 +1259,7 @@ const signInUser = async (req, res) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `authRouter.js` file and you will hook everything up.
 
@@ -1272,7 +1269,7 @@ In the route you left unfinished, reference the controller.
 router.post('/sign-in', authController.signInUser)
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>authRouter</b> file so far . . . </summary>
@@ -1293,7 +1290,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -1390,7 +1387,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Final <b>signOutUser</b> function . . . </summary>
@@ -1410,7 +1407,7 @@ const signOutUser = (req, res) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `authRouter.js` file and hook it up.
 
@@ -1420,7 +1417,7 @@ In the route you left unfinished, reference the controller.
 router.get('/sign-out', authController.signOutUser)
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>authRouter</b> file so far . . . </summary>
@@ -1442,7 +1439,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -1608,7 +1605,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>userController</b> file so far . . . </summary>
@@ -1647,7 +1644,7 @@ module.exports = {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `userRouter.js` file and you will hook it up.
 
@@ -1669,7 +1666,7 @@ Below this, you need to export `router`.
 module.exports = router
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>userRouter</b> file so far . . . </summary>
@@ -1689,7 +1686,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -1827,7 +1824,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Final <b>updatePassword</b> function . . . </summary>
@@ -1871,7 +1868,7 @@ const updatePassword = async (req, res) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `authRouter.js` file and you will hook it up.
 
@@ -1881,7 +1878,7 @@ In the route you left earlier, you'll reference the function!
 router.put('/:id', authController.updatePassword)
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>authRouter</b> file so far . . . </summary>
@@ -1904,7 +1901,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -2075,7 +2072,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>recipeController</b> file so far . . . </summary>
@@ -2108,7 +2105,7 @@ module.exports = {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `recipeRouter.js` file and you will hook it up.
 
@@ -2130,7 +2127,7 @@ Below this, you need to export `router`.
 module.exports = router
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>recipeRouter</b> file so far . . . </summary>
@@ -2150,7 +2147,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -2252,7 +2249,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>getAllRecipes</b> function . . . </summary>
@@ -2274,7 +2271,7 @@ const getAllRecipes = async (req, res) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `recipeRouter.js` file and you will hook it up.
 
@@ -2284,7 +2281,7 @@ In the route from earlier, you reference the function:
 router.get('/', recipeController.getAllRecipes)
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>recipeRouter</b> file so far . . . </summary>
@@ -2305,7 +2302,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -2396,7 +2393,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>getRecipeById</b> function . . . </summary>
@@ -2417,7 +2414,7 @@ const getRecipeById = async (req, res) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `recipeRouter.js` file and you will hook it up.
 
@@ -2427,7 +2424,7 @@ In the route from earlier, you reference the function:
 router.get('/', recipeController.getRecipeById)
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>recipeRouter</b> file so far . . . </summary>
@@ -2449,7 +2446,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -2554,7 +2551,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>updateRecipeById</b> function . . . </summary>
@@ -2576,7 +2573,7 @@ const updateRecipeById = async (req, res) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `recipeRouter.js` file and you will hook it up.
 
@@ -2586,7 +2583,7 @@ In the route from earlier, you reference the function:
 router.put('/:id', recipeController.updateRecipeById)
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>recipeRouter</b> file so far . . . </summary>
@@ -2609,7 +2606,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -2708,7 +2705,7 @@ module.exports = {
 }
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>deleteRecipeById</b> function . . . </summary>
@@ -2730,7 +2727,7 @@ const deleteRecipeById = async (req, res) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, head back to your `recipeRouter.js` file and you will hook it up.
 
@@ -2740,7 +2737,7 @@ In the route from earlier, you reference the function:
 router.delete('/:id', recipeController.deleteRecipeById)
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 Your <b>recipeRouter</b> file so far . . . </summary>
@@ -2764,7 +2761,7 @@ module.exports = router
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Run your server...
 
@@ -2843,7 +2840,7 @@ touch ./views/partials/header.ejs ./views/partials/footer.ejs
 
 In the following sections, you can copy/paste the EJS from these snippets to their respective files. Or, feel free to create your own!
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>index.ejs</b></summary>
@@ -2861,7 +2858,7 @@ In the following sections, you can copy/paste the EJS from these snippets to the
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>header.ejs</b></summary>
@@ -2901,7 +2898,7 @@ In the following sections, you can copy/paste the EJS from these snippets to the
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 For your header to be able to use the `session` object to conditionally render the nav, you need to set up a middleware in your `server.js`. Just under your middleware stack:
 
@@ -2912,7 +2909,7 @@ app.use((req, res, next) => {
 })
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>footer.ejs</b></summary>
@@ -2930,7 +2927,7 @@ app.use((req, res, next) => {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, you'll set up your base route in `server.js` to render your `index.js`. This replaces your old `res.send`.
 
@@ -2963,7 +2960,7 @@ Then:
 touch ./views/auth/sign-up.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>sign-up.ejs</b></summary>
@@ -2989,7 +2986,7 @@ touch ./views/auth/sign-up.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Now, let's create a route to render this view.
 
@@ -3016,7 +3013,7 @@ Let's also make a page that thanks them for signing up:
 touch ./views/auth/thanks.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>thanks.ejs</b></summary>
@@ -3036,7 +3033,7 @@ touch ./views/auth/thanks.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 In `authController.js`, you'll render this EJS page after the user registers.
 
@@ -3059,7 +3056,7 @@ You also need a view to allow existing users to sign in.
 touch ./views/auth/sign-in.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>sign-in.ejs</b></summary>
@@ -3081,7 +3078,7 @@ touch ./views/auth/sign-in.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Then in `authRouter.js`, add:
 
@@ -3122,7 +3119,7 @@ Then, create the file:
 touch ./views/users/profile.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>profile.ejs</b></summary>
@@ -3151,7 +3148,7 @@ touch ./views/users/profile.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Back in your `userController.js`, you need to make sure you populate the recipes field when you get your user from the database.
 
@@ -3180,7 +3177,7 @@ This page allows the user to update their password.
 touch ./views/auth/update-password.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>update-password.ejs</b></summary>
@@ -3203,7 +3200,7 @@ touch ./views/auth/update-password.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 In `authRouter.js`, render the route using your session object to grab the user info:
 
@@ -3226,7 +3223,7 @@ You also need a page that confirms the password has been updated. You'll render 
 touch ./views/auth/confirm.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>confirm.ejs</b></summary>
@@ -3243,7 +3240,7 @@ touch ./views/auth/confirm.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 In your `authController.js` file, you need to replace the `res.send` in your `updatePassword` controller with:
 
@@ -3262,7 +3259,7 @@ A list of all recipes in the app.
 touch ./views/recipes/all.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>all.ejs</b></summary>
@@ -3286,7 +3283,7 @@ touch ./views/recipes/all.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Over in your `recipeController.js`, you need to replace the `res.send` in `getAllRecipes` with a render of your new page:
 
@@ -3307,7 +3304,7 @@ A detailed view of a single recipe.
 touch ./views/recipes/show.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>show.ejs</b></summary>
@@ -3342,7 +3339,7 @@ touch ./views/recipes/show.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 In `recipeController.js`, update the `res.send` in `getRecipeById` with:
 
@@ -3365,7 +3362,7 @@ You need a form where users can create new recipes.
 touch ./views/recipes/new.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>new.ejs</b></summary>
@@ -3389,7 +3386,7 @@ touch ./views/recipes/new.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 Route to render the form in `recipeRouter.js`. This needs to go above any `'/:id'` routes:
 
@@ -3418,7 +3415,7 @@ A form to edit an existing recipe.
 touch ./views/recipes/edit.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>edit.ejs</b></summary>
@@ -3441,7 +3438,7 @@ touch ./views/recipes/edit.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 In `recipeRouter.js`, you need to import your `Recipe` model because you'll need the recipe details when you edit:
 
@@ -3475,7 +3472,7 @@ A page that confirms to the user that the recipe has been deleted.
 touch ./views/recipes/confirm.ejs
 ```
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>confirm.ejs</b></summary>
@@ -3492,7 +3489,7 @@ touch ./views/recipes/confirm.ejs
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 After you delete the recipe, you need to render the confirm page. In your `recipeController.js` file, in `deleteRecipeById`, replace the `res.send` with:
 
@@ -3529,7 +3526,7 @@ app.use(express.static('public'))
 
 Now your project will be able to find and use your `style.css` file.
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 <details>
 <summary>💡 <b>style.css</b></summary>
@@ -3654,7 +3651,7 @@ footer {
 
 </details>
 
----
+· · · · · · · · · · · · · · · · · · · ·
 
 [📖 Back to Top](#-table-of-contents)
 
