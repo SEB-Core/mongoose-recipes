@@ -33,10 +33,10 @@ const getRecipeById = async (req, res) => {
 const updateRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
+      returnDocument: "after"
     })
     // req.body overwrites any matching fields with the new values. Only the updated fields are necessary.
-    // { new: true } ensures that the updated record is what is returned
+    // { returnDocument: "after" } ensures that the updated record is what is returned
     res.redirect(`/recipes/${recipe._id}`)
   } catch (error) {
     console.error('An error has occurred updating a recipe!', error.message)

@@ -2454,12 +2454,12 @@ const recipe = await Recipe.findByIdAndUpdate(req.params.id, )
 
 The second argument to `findByIdAndUpdate` is an object with the updated fields - `req.body`.
 
-The third argument is an optional object with various options in it. The option you want is `new: true`. This ensures that the updated record is returned from the database:
+The third argument is an optional object with various options in it. The option you want is `returnDocument: "after"`. This ensures that the updated record is returned from the database:
 
 ```js
-const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { new: true })
+const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { returnDocument: "after" })
 // req.body overwrites any matching fields with the new values. Only the updated fields are necessary.
-// { new: true } ensures that the updated record is what is returned
+// { returnDocument: "after" } ensures that the updated record is what is returned
 ```
 
 Now, you send a response:
@@ -2498,7 +2498,7 @@ module.exports = {
 ```js
 const updateRecipeById = async (req, res) => {
   try {
-    const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { returnDocument: "after" })
     // req.body overwrites any matching fields with the new values. Only the updated fields are necessary.
     res.send(recipe)
     // This can be an EJS page later...
