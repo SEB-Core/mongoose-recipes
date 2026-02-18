@@ -2459,7 +2459,7 @@ The third argument is an optional object with various options in it. The option 
 ```js
 const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { returnDocument: "after" })
 // req.body overwrites any matching fields with the new values. Only the updated fields are necessary.
-// { new: true } ensures that the updated record is what is returned
+// { returnDocument: "after" } ensures that the updated record is what is returned
 ```
 
 Now, you send a response:
