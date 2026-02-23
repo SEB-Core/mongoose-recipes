@@ -18,7 +18,7 @@ const getUserById = async (req, res) => {
     // You have also added the recipes to the response.
     res.render('./users/profile.ejs', { user: data })
   } catch (error) {
-    console.error('An error has occurred finding a user!', error.message)
+    console.error('⚠️ An error has occurred finding a user!', error.message)
   }
 }
 
