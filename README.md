@@ -67,7 +67,7 @@ When this completes, you will see a `package.json` file generated in your projec
 Let's install a few things you're going to need. In your terminal:
 
 ```sh
-npm install express morgan dotenv mongoose ejs method-override express-session bcrypt
+npm install express morgan dotenv mongoose ejs method-override express-session bcrypt connect-mongo
 ```
 
 Let's break each of these down:
@@ -80,6 +80,7 @@ Let's break each of these down:
 - `method-override` - allows you to perform PUT/DELETE functionality from an HTML form
 - `express-session` - is required for authentication and allows your Express server to access the `session` object
 - `bcrypt` - used to *hash* and *compare* your user's password when setting up your session authentication
+- `connect-mongo` - used to connect our `session` to MongoDB and store it there for better security and persistency
 
 Once these installs complete, you should see them listed alongside their version numbers in the `"dependencies"` key of your `package.json` file.  A `node_modules` folder and a `package-lock.json` file will also be generated.
 
@@ -122,7 +123,13 @@ You need a file to set up your **Express** server in. By convention, you'll crea
 touch server.js
 ```
 
-In this file, you'll require the **Express** library.
+In this file, require `dotenv` and immediately invoke the `.config()` method so you can access your `.env` file all throughout our Express app. `{ quiet: true }` ensures that `dotenv` doesn't spam our terminal when it does its work.
+
+```js
+require('dotenv').config({ quiet: true })
+```
+
+Require the **Express** library.
 
 ```js
 const express = require('express')
@@ -131,7 +138,7 @@ const express = require('express')
 You also will want to require and set up **Morgan** for logging.
 
 ```js
-const logger = require('morgan')
+const morgan = require('morgan')
 ```
 
 Next, you'll require **Method Override**. You'll need this later when you set up your forms.
@@ -146,10 +153,10 @@ This app will have authentication, so you will also need to set up **Express Ses
 const session = require('express-session')
 ```
 
-Require `dotenv` and immediately invoke the `.config()` method so you can access your `.env` file.
+To store our `session` object in MongoDB, we need to require and use `MongoStore` from `connect-mongo`. Notice that it is *destructured*...
 
 ```js
-require('dotenv').config()
+const { MongoStore } = require("connect-mongo")
 ```
 
 Now that you've required these libraries, you need to put them to use. Below your requires:
@@ -157,40 +164,53 @@ Now that you've required these libraries, you need to put them to use. Below you
 ```js
 const app = express()
 
-app.use(logger('dev'))
-
+app.use(morgan('dev'))
 app.use(methodOverride('_method'))
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI
+  })
 }))
 ```
 
-Note that the `session` method takes in an object with three key/value pairs:
+Note that the `session` method takes in an object with **four** key/value pairs:
 
 1.  Your app **"secret"** that you will set up in your `.env` later
 2.  An option called **"resave"** set to `false` to ensure that the session object is only restored if modified
 3.  An option called **"saveUninitialized"** set to `true` to ensure that a session object is saved even if it contains no data
+4.  An option called **"store"** where we use `MongoStore.create()` to set up a secure place for our `session` object to be stored.
 
 You also need to to use two middleware functions from `express`:
 - `express.json()` - Parses incoming requests with JSON payloads and makes the data available on `req.body`
 - `express.urlencoded()` - Parses URL-encoded data (from forms) and makes it available on `req.body`
+- `express.static()` - This hosts our `./public` folder so that our Express app knows where to find static assets like images, and eventually our CSS file(s).
 
-Below your logger...
+Above other middleware...
 
 ```js
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, "public")))
 ```
 
 `{ extended: false }` is the option (default) for basic form parsing and will work for most forms. Setting to `true` is for complex forms with arrays and objects as form data.
+
+`path.join(__dirname, "public"))` simply connects our base URL to the `public` folder so that it can be found.
+
+For `express.static()` to be able use `path`, we need to require it toward the top of our file.
+
+```js
+const path = require("path")
+```
 
 Let's also set up a base route with a simple response for now.
 
 ```js
 app.get('/', (req, res) => {
-  res.send('Your app is connected . . . ')
+  res.send('🧑‍🍳 Mongoose Recipes is waiting for orders . . . ')
 })
 ```
 
@@ -200,11 +220,13 @@ Just under your requires, set up your `PORT` variable following real-world best 
 const PORT = process.env.PORT ? process.env.PORT : 3000
 ```
 
-Finally, at the bottom of the file, let's listen on this `PORT` for your server to receive requests.
+This checks our `.env` file first to see if there is a `PORT` variable in there, and if not - uses `3000`.
+
+Finally, at the *very bottom* of the file, let's listen on this `PORT` for your server to receive requests.
 
 ```js
 app.listen(PORT, () => {
-  console.log(`Running Server on Port ${PORT} . . . `)
+  console.log(`🥘 Mongoose Recipes Server is cooking on Port ${PORT} . . . `)
 })
 ```
 
@@ -216,34 +238,40 @@ app.listen(PORT, () => {
 <br>
 
 ```js
+require('dotenv').config({ quiet: true })
 const express = require('express')
-const logger = require('morgan')
+const morgan = require('morgan')
 const methodOverride = require('method-override')
 const session = require('express-session')
-require('dotenv').config()
+
+const { MongoStore } = require("connect-mongo")
+
+const path = require("path")
 
 const PORT = process.env.PORT ? process.env.PORT : 3000
 
 const app = express()
 
-app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, "public")))
+app.use(morgan('dev'))
 app.use(methodOverride('_method'))
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI
   })
-)
+}))
 
 app.get('/', (req, res) => {
-  res.send('Your app is connected . . . ')
+  res.send('🧑‍🍳 Mongoose Recipes is open for business . . . ')
 })
 
 app.listen(PORT, () => {
-  console.log(`Running Server on Port ${PORT} . . . `)
+  console.log(`🥘 Mongoose Recipes Server is cooking on Port ${PORT} . . . `)
 })
 ```
 
@@ -260,82 +288,34 @@ app.listen(PORT, () => {
 
 Now that your basic **Express** server is set up to run, you need to test it out.
 
-In your `package.json` file, let's add a script to run your server. There are two options for this:
+In your `package.json` file, let's add a script to run your server.
 
-· · · · · · · · · · · · · · · · · · · ·
+`node --watch` is a built-in **Node** flag (as of version 18) that restarts your app when watched files change — similar to a package called `nodemon`, but without having to install an extra dependency.
 
-<details>
-<summary> 🪛 <b>nodemon</b></summary>
-
-<br>
-
-The npm package [nodemon](https://www.npmjs.com/package/nodemon) is a dev tool that automatically restarts your server when it detects changes in your files. To use `nodemon`, it's best to install it globally on your system (if you have not already):
-
-```sh
-npm install -g nodemon
-```
-
-Then, add this `start` script to your `package.json`:
+To use, just add a `dev` script to your `package.json`:
 
 ```json
 "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1",
-  "start": "nodemon server.js"
+  "dev": "node --watch server.js"
 },
 ```
-
-If you choose to use `nodemon`, you don't even technically have to use this "start" script. You can simply run `nodemon` in your terminal and it will automatically run your server file!
-
-In your `package.json`, simply change `"main": "index.js"` to `"main": "server.js"` and `nodemon` will automatically know what file to run.
-
-```json
-{
-  "name": "mongoose-recipes",
-  "version": "1.0.0",
-  "main": "server.js",
-}
-```
-
-</details>
-
-· · · · · · · · · · · · · · · · · · · ·
-
-<details>
-<summary>🪛 <b>node --watch</b></summary>
-
-<br>
-
-`node --watch` is a built-in **Node** flag (as of version 18) that restarts your app when watched files change — similar to `nodemon`, but without having to install an extra dependency.
-
-To use, just add this `start` script to your `package.json`:
-
-```json
-"scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "start": "node --watch server.js"
-},
-```
-</details>
-
-· · · · · · · · · · · · · · · · · · · ·
-
-Whichever you choose is up to you.
 
 After your script is set up, you can run your server. In your terminal:
 
 ```sh
-npm start
+npm run dev
 ```
 
 You should see:
 
 ```txt
-Running Server on Port 3000 . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
 ```
 
 Now, let's make a request to `'http://localhost:3000/'` with [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/downloads/) to test your base route.
 
-The response you get should be `Your app is connected . . . `. You will eventually replace this with your rendered **EJS** home page. This is just a test to make sure your server is set up properly.
+The response you get should be `🧑‍🍳 Mongoose Recipes is open for business . . . `. You will eventually replace this with your rendered **EJS** home page. This is just a test to make sure your server is set up properly.
 
 For now, let's stop your server by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>.
 
@@ -402,43 +382,20 @@ Skip past steps 1 & 2. On Step 3, click the copy button to add the connection st
 You will take this string and paste it into your `.env` file under the variable name `MONGODB_URI`, by convention. Like this:
 
 ```txt
-MONGODB_URI=mongodb+srv://<your_username>:<db_password>@<cluster_name>.qscuy.azure.mongodb.net/<database-name>?retryWrites=true&w=majority&appName=cluster_name
+MONGODB_URI=mongodb+srv://<your_username>:<db_password>@<cluster_name>.<cluster_id>.<provider>.mongodb.net/<database_name>
 ```
 
-Yours may look completely different than the example above due to the host and region you selected on setup, and that is fine. After pasting your connection string, you need to replace `<db_password>` with *your* database password. Replace the `< >` characters as well.
+Yours may look completely different than the example above due to the provider and region you selected on setup, and that is fine. After pasting your connection string, you need to replace `<db_password>` with *your* database password. Replace the `< >` characters as well.
 
-There are a few query parameters at the end of the connection string. Each serves a unique purpose.
-
-· · · · · · · · · · · · · · · · · · · ·
-
-<details>
-<summary> 🪛 A breakdown of each <b>query parameter</b> . . . </summary>
-
-<br>
+If there is a query parameter at the end of the connection string, it serves a unique purpose.
 
 ```txt
-retryWrites=true
-```
-
-This first query parameter tells **MongoDB** to automatically retry write operations (like insert, update, delete) *once* if they fail due to an error like a dropped connection.
-
-This is recommended to **keep**.
-
-```txt
-w=majority
-```
-
-When **MongoDB** saves our data, it does so on multiple servers to ensure data is not lost. `w=majority` tells **MongoDB** not to return a *success code* until a *majority* of these servers have successfully received this data.
-
-This is best to **keep** for production code.
-
-```txt
-appName=cluster_name
+?appName=cluster_name
 ```
 
 This is just a label for your connection in logs/monitoring tools.
 
-You can **keep** it and name it whatever you want or **remove** it.
+You can **keep** it and name it whatever you want, or **remove** it entirely.
 
 </details>
 
@@ -484,13 +441,22 @@ touch ./db/index.js
 You'll use this file to establish a connection to your database with `mongoose`.
 
 ```js
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 
-mongoose.connect(process.env.MONGODB_URI)
+const connect = () => {
+  try {
+    mongoose.connect(process.env.MONGODB_URI)
 
-mongoose.connection.on("connected", () => {
-  console.log(`Successfully connected to MongoDB database . . .`)
-})
+    mongoose.connection.on("connected", () => {
+      console.log(`🍃 Successfully connected to MongoDB database . . . `)
+    })
+  } catch (error) {
+    console.log("⚠️ Error connecting to MongoDB . . . ")
+    console.log(error)
+  }
+}
+
+connect()
 
 module.exports = mongoose
 ```
@@ -506,14 +472,14 @@ const db = require('./db')
 Now, you run your server and watch your database connection occur!
 
 ```sh
-npm start
+npm run dev
 ```
 
 You should now see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 [📖 Back to Top](#-table-of-contents)
@@ -599,16 +565,12 @@ const userSchema = new mongoose.Schema(
 Then, you need to use **Mongoose**'s `.model()` method to turn your regular schema into a true model, giving it much more abilities! You do that with this line:
 
 ```js
-const User = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema)
 ```
 
 By convention, the first argument to this method will be a *PascalCased* string of your collection name - in this case, `"User"`. The second argument is the `userSchema` variable from above.
 
-Now, you export it so that you can utilize it elsewhere in your app.
-
-```js
-module.exports = User
-```
+You export it so that you can utilize it elsewhere in your app.
 
 Your model is now ready to be used to perform CRUD operations on your database!
 
@@ -633,9 +595,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-const User = mongoose.model('User', userSchema)
-
-module.exports = User
+module.exports = mongoose.model('User', userSchema)
 ```
 
 </details>
@@ -690,14 +650,10 @@ const recipeSchema = new mongoose.Schema(
 Then, you need to use **Mongoose**'s `.model()` method again to turn your regular schema into a true model. You do that with this line:
 
 ```js
-const Recipe = mongoose.model('Recipe', recipeSchema)
+module.exports = mongoose.model('Recipe', recipeSchema)
 ```
 
-Now you export it so that you can utilize it elsewhere in your app.
-
-```js
-module.exports = Recipe
-```
+You export it so that you can utilize it elsewhere in your app.
 
 Your model is now ready to be used to perform CRUD operations on your database!
 
@@ -725,9 +681,7 @@ const recipeSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-const Recipe = mongoose.model('Recipe', recipeSchema)
-
-module.exports = Recipe
+module.exports = mongoose.model('Recipe', recipeSchema)
 ```
 
 </details>
@@ -887,7 +841,7 @@ First, you'll check the database for the user:
 ```js
 const userInDatabase = await User.exists({ email: req.body.email })
 if (userInDatabase) {
-  return res.send('Username already taken!')
+  return res.send('❌ Username already taken!')
   // This can be an EJS page later...
 }
 ```
@@ -896,15 +850,15 @@ Now, to check the passwords:
 
 ```js
 if (req.body.password !== req.body.confirmPassword) {
-  return res.send('Password and Confirm Password must match')
+  return res.send('❌ Password and Confirm Password must match')
   // This can also be an EJS page...
 }
 ```
 
-Hashing the password with `bcrypt`:
+Hashing the password with `bcrypt.hash()`:
 
 ```js
-const hashedPassword = bcrypt.hashSync(req.body.password, 12)
+const hashedPassword = await bcrypt.hash(req.body.password, 12)
 ```
 
 Now, creating the user:
@@ -922,7 +876,7 @@ await User.create({
 Finally, sending a response:
 
 ```js
-res.send(`Thanks for signing up!`)
+res.send(`🙏 Thanks for signing up!`)
 // This can be an EJS page later...
 ```
 
@@ -930,7 +884,7 @@ Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred registering a user!', error.message)
+  console.error('⚠️ An error has occurred registering a user!', error.message)
 }
 ```
 
@@ -958,14 +912,14 @@ const registerUser = async (req, res) => {
   try {
     const userInDatabase = await User.exists({ email: req.body.email })
     if (userInDatabase) {
-      return res.send('Username already taken!')
+      return res.send('❌ Username already taken!')
       // This can be an EJS page later...
     }
     if (req.body.password !== req.body.confirmPassword) {
-      return res.send('Password and Confirm Password must match')
+      return res.send('❌ Password and Confirm Password must match')
       // This can also be an EJS page...
     }
-    const hashedPassword = bcrypt.hashSync(req.body.password, 12)
+    const hashedPassword = await bcrypt.hash(req.body.password, 12)
     await User.create({
       email: req.body.email,
       password: hashedPassword,
@@ -973,10 +927,10 @@ const registerUser = async (req, res) => {
       last: req.body.last,
       picture: req.body.picture
     })
-    res.send(`Thanks for signing up!`)
+    res.send(`🙏 Thanks for signing up!`)
     // This can be an EJS page later...
   } catch (error) {
-    console.error('An error has occurred registering a user!', error.message)
+    console.error('⚠️ An error has occurred registering a user!', error.message)
   }
 }
 
@@ -1034,14 +988,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `POST` request to `'http://localhost:3000/auth/sign-up'` with something like the following as the request body:
@@ -1105,24 +1059,24 @@ First, you'll check the database for the user:
 ```js
 const user = await User.findOne({ email: req.body.email })
 if (!user) {
-  return res.send('No user has been registered with that email. Please sign up!')
+  return res.send('❌ No user has been registered with that email. Please sign up!')
   // This can be an EJS page later...
 }
 ```
 
-Comparing the password with `bcrypt`:
+Comparing the password with `bcrypt.compare()`:
 
 ```js
-const validPassword = bcrypt.compareSync(
+const validPassword = await bcrypt.compare(
   req.body.password,
   user.password
 )
 if (!validPassword) {
-  return res.send('Incorrect password! Please try again.')
+  return res.send('❌ Incorrect password! Please try again.')
 }
 ```
 
-`bcrypt.compareSync()` will return a `boolean` value.
+`bcrypt.compare()` will return a `boolean` value.
 
 Now, creating the `session` object:
 
@@ -1133,18 +1087,20 @@ req.session.user = {
 }
 ```
 
-Finally, sending a response:
+Finally, saving the `session` object and sending a response:
 
 ```js
-res.send(`Thanks for signing in, ${user.first}!`)
-// This can be an EJS page or redirect later...
+req.session.save(() => {
+  res.send(`👋 Thanks for signing in, ${user.first}!`)
+  // This can be an EJS page or redirect later...
+})
 ```
 
 Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred signing in a user!', error.message)
+  console.error('⚠️ An error has occurred signing in a user!', error.message)
 }
 ```
 
@@ -1170,26 +1126,28 @@ const signInUser = async (req, res) => {
     const user = await User.findOne({ email: req.body.email })
     if (!user) {
       return res.send(
-        'No user has been registered with that email. Please sign up!'
+        '❌ No user has been registered with that email. Please sign up!'
       )
       // This can be an EJS page later...
     }
-    const validPassword = bcrypt.compareSync(
+    const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
     )
     if (!validPassword) {
-      return res.send('Incorrect password! Please try again.')
+      return res.send('❌ Incorrect password! Please try again.')
       // This can also be an EJS page...
     }
     req.session.user = {
       email: user.email,
       _id: user._id
     }
-    res.send(`Thanks for signing in, ${user.first}!`)
-    // This can be an EJS page or redirect later...
+    req.session.save(() => {
+      res.send(`👋 Thanks for signing in, ${user.first}!`)
+      // This can be an EJS page or redirect later...
+    })
   } catch (error) {
-    console.error('An error has occurred signing in a user!', error.message)
+    console.error('⚠️ An error has occurred signing in a user!', error.message)
   }
 }
 ```
@@ -1232,14 +1190,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `POST` request to `'http://localhost:3000/auth/sign-in'` with something like the following as the request body:
@@ -1300,17 +1258,19 @@ You'll use the `session` object's built in `.destroy()` method:
 req.session.destroy()
 ```
 
-Then, send the user back to the home page (which you'll build in **EJS** later):
+Then, send the user back to the home page (which you'll build in **EJS** later). We pass this callback function in as an argument to `.destroy()`.
 
 ```js
-res.redirect('/')
+req.session.destroy(() => {
+  res.redirect("/")
+})
 ```
 
 Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred signing out a user!', error.message)
+  console.error('⚠️ An error has occurred signing out a user!', error.message)
 }
 ```
 
@@ -1334,10 +1294,11 @@ module.exports = {
 ```js
 const signOutUser = (req, res) => {
   try {
-    req.session.destroy()
-    res.redirect('/')
+    req.session.destroy(() => {
+      res.redirect("/")
+    })
   } catch (error) {
-    console.error('An error has occurred signing out a user!', error.message)
+    console.error('⚠️ An error has occurred signing out a user!', error.message)
   }
 }
 ```
@@ -1381,14 +1342,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `GET` request to `'http://localhost:3000/auth/sign-out'`. No request body needed.
@@ -1530,7 +1491,7 @@ Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred finding a user!', error.message)
+  console.error('⚠️ An error has occurred finding a user!', error.message)
 }
 ```
 
@@ -1570,7 +1531,7 @@ const getUserById = async (req, res) => {
     res.send(data)
     // This can be an EJS page later...
   } catch (error) {
-    console.error('An error has occurred finding a user!', error.message)
+    console.error('⚠️ An error has occurred finding a user!', error.message)
   }
 }
 
@@ -1628,14 +1589,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `GET` request to `"http://localhost:3000/users/<some-users-id>"` with a *real ObjectID* of a user you've made in your database:
@@ -1694,7 +1655,7 @@ First, you'll check the database for the user:
 ```js
 const user = await User.findById(req.params.id)
 if (!user) {
-  return res.send('No user with that ID exists!')
+  return res.send('❌ No user with that ID exists!')
   // This can be an EJS page later...
 }
 ```
@@ -1702,12 +1663,12 @@ if (!user) {
 Next, you need to confirm they know their current password, especially before changing to a new one. This is similar to signing in, but you *don't* need to reset the `session` object since they're already signed in:
 
 ```js
-const validPassword = bcrypt.compareSync(
+const validPassword = await bcrypt.compare(
   req.body.oldPassword,
   user.password
 )
 if (!validPassword) {
-  return res.send('Your old password was not correct! Please try again.')
+  return res.send('❌ Your old password was not correct! Please try again.')
   // This can also be an EJS page...
 }
 ```
@@ -1716,7 +1677,7 @@ Now, to check the user's new password:
 
 ```js
 if (req.body.newPassword !== req.body.confirmPassword) {
-  return res.send('Password and Confirm Password must match')
+  return res.send('❌ Password and Confirm Password must match')
   // This can also be an EJS page...
 }
 ```
@@ -1724,7 +1685,7 @@ if (req.body.newPassword !== req.body.confirmPassword) {
 Hashing the new password with `bcrypt`:
 
 ```js
-const hashedPassword = bcrypt.hashSync(req.body.newPassword, 12)
+const hashedPassword = await bcrypt.hash(req.body.newPassword, 12)
 ```
 
 Now, updating the user. You already have the user's record from your `findById`, so there's no need to do a new `findByIdAndUpdate`. You'll just update the `password` field and `.save()`:
@@ -1738,7 +1699,7 @@ await user.save()
 Finally, sending a response:
 
 ```js
-res.send(`Your password has been updated, ${user.first}!`)
+res.send(`✅ Your password has been updated, ${user.first}!`)
 // This can be an EJS page later...
 ```
 
@@ -1746,7 +1707,7 @@ Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error("An error has occurred updating a user's password!", error.message)
+  console.error("⚠️ An error has occurred updating a user's password!", error.message)
 }
 ```
 
@@ -1773,30 +1734,30 @@ const updatePassword = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
     if (!user) {
-      return res.send('No user with that ID exists!')
+      return res.send('❌ No user with that ID exists!')
       // This can be an EJS page later...
     }
-    const validPassword = bcrypt.compareSync(
+    const validPassword = await bcrypt.compare(
       req.body.oldPassword,
       user.password
     )
     if (!validPassword) {
-      return res.send('Your old password was not correct! Please try again.')
+      return res.send('❌ Your old password was not correct! Please try again.')
       // This can also be an EJS page...
     }
     if (req.body.newPassword !== req.body.confirmPassword) {
-      return res.send('Password and Confirm Password must match')
+      return res.send('❌ Password and Confirm Password must match')
       // This can also be an EJS page...
     }
-    const hashedPassword = bcrypt.hashSync(req.body.newPassword, 12)
+    const hashedPassword = await bcrypt.hash(req.body.newPassword, 12)
     user.password = hashedPassword
     // It's critical that this field is updated with the password you hashed with bcrypt, and never the plain text password in req.body.password
     await user.save()
-    res.send(`Your password has been updated, ${user.first}!`)
+    res.send(`✅ Your password has been updated, ${user.first}!`)
     // This can be an EJS page later...
   } catch (error) {
     console.error(
-      "An error has occurred updating a user's password!",
+      "⚠️ An error has occurred updating a user's password!",
       error.message
     )
   }
@@ -1843,14 +1804,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `PUT` request to `'http://localhost:3000/auth/<some-users-id>'` with something like the following as the request body:
@@ -1997,7 +1958,7 @@ Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred creating a recipe!', error.message)
+  console.error('⚠️ An error has occurred creating a recipe!', error.message)
 }
 ```
 
@@ -2031,7 +1992,7 @@ const createRecipe = async (req, res) => {
     res.send(recipe)
     // This can be an EJS page later...
   } catch (error) {
-    console.error('An error has occurred creating a recipe!', error.message)
+    console.error('⚠️ An error has occurred creating a recipe!', error.message)
   }
 }
 
@@ -2089,14 +2050,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `POST` request to `'http://localhost:3000/recipes'` with something like the following as the request body. Take note, the ObjectID in `author` needs to be *your* user:
@@ -2173,7 +2134,7 @@ Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred getting all recipes!', error.message)
+  console.error('⚠️ An error has occurred getting all recipes!', error.message)
 }
 ```
 
@@ -2201,7 +2162,7 @@ const getAllRecipes = async (req, res) => {
     res.send(recipes)
     // This can be an EJS page later...
   } catch (error) {
-    console.error('An error has occurred getting all recipes!', error.message)
+    console.error('⚠️ An error has occurred getting all recipes!', error.message)
   }
 }
 ```
@@ -2244,14 +2205,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `GET` request to `'http://localhost:3000/recipes'`. No need for a request body.
@@ -2316,7 +2277,7 @@ Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred getting a recipe!', error.message)
+  console.error('⚠️ An error has occurred getting a recipe!', error.message)
 }
 ```
 
@@ -2344,7 +2305,7 @@ const getRecipeById = async (req, res) => {
     res.send(recipe)
     // This can be an EJS page later...
   } catch (error) {
-    console.error('An error has occurred getting a recipe!', error.message)
+    console.error('⚠️ An error has occurred getting a recipe!', error.message)
   }
 }
 ```
@@ -2388,14 +2349,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `GET` request to `'http://localhost:3000/recipes/<some-recipe-id>'`. The `id` needs to be an ObjectID from *your* database.
@@ -2473,7 +2434,7 @@ Don't forget to handle your errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred updating a recipe!', error.message)
+  console.error('⚠️ An error has occurred updating a recipe!', error.message)
 }
 ```
 
@@ -2500,10 +2461,11 @@ const updateRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { returnDocument: "after" })
     // req.body overwrites any matching fields with the new values. Only the updated fields are necessary.
+    // { returnDocument: "after" } ensures that the updated record is what is returned
     res.send(recipe)
     // This can be an EJS page later...
   } catch (error) {
-    console.error('An error has occurred updating a recipe!', error.message)
+    console.error('⚠️ An error has occurred updating a recipe!', error.message)
   }
 }
 ```
@@ -2548,14 +2510,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `PUT` request to `'http://localhost:3000/recipes/<some-recipe-id>'`. The `id` needs to be an ObjectID from *your* database. The request body might look something like this:
@@ -2619,7 +2581,7 @@ await Recipe.findByIdAndDelete(req.params.id)
 Send a response:
 
 ```js
-res.send(`Recipe with ID ${req.params.id} has been deleted successfully!`)
+res.send(`🗑️ Recipe with ID ${req.params.id} has been deleted successfully!`)
 // This can be an EJS page later...
 ```
 
@@ -2627,7 +2589,7 @@ Handle errors:
 
 ```js
 } catch (error) {
-  console.error('An error has occurred deleting a recipe!', error.message)
+  console.error('⚠️ An error has occurred deleting a recipe!', error.message)
 }
 ```
 
@@ -2654,10 +2616,10 @@ const deleteRecipeById = async (req, res) => {
   try {
     await Recipe.findByIdAndDelete(req.params.id)
     // No need to store this in a variable since it's being deleted
-    res.send(`Recipe with ID ${req.params.id} has been deleted successfully!`)
+    res.send(`🗑️ Recipe with ID ${req.params.id} has been deleted successfully!`)
     // This can be an EJS page later...
   } catch (error) {
-    console.error('An error has occurred deleting a recipe!', error.message)
+    console.error('⚠️ An error has occurred deleting a recipe!', error.message)
   }
 }
 ```
@@ -2703,14 +2665,14 @@ module.exports = router
 Run your server...
 
 ```sh
-npm start
+npm run dev
 ```
 
 You'll see:
 
 ```txt
-Running Server on Port 3000 . . .
-Successfully connected to MongoDB database . . .
+🥘 Mongoose Recipes Server is cooking on Port 3000 . . .
+🍃 Successfully connected to MongoDB database . . .
 ```
 
 Now, you test with **Insomnia** or **Postman** - a `DELETE` request to `'http://localhost:3000/recipes/<some-recipe-id>'`. The `id` needs to be an ObjectID from *your* database. No request body.
@@ -2837,13 +2799,41 @@ In the following sections, you can copy/paste the **EJS** from these snippets to
 
 · · · · · · · · · · · · · · · · · · · ·
 
-For your header to be able to use the `session` object to conditionally render the nav, you need to set up a middleware in your `server.js`. Just under your middleware stack:
+For your header to be able to use the `session` object to conditionally render the nav, you need to set up a middleware and utilize it your `server.js`.
+
+Create a middleware directory and file:
+
+```sh
+mkdir ./middleware
+```
+
+```sh
+touch ./middleware/index.js
+```
+
+In `./middleware/index.js`:
 
 ```js
-app.use((req, res, next) => {
-  res.locals.user = req.session.user
+const passUserToView = (req, res, next) => {
+  res.locals.user = req.session.user ? req.session.user : null
   next()
-})
+}
+
+module.exports = {
+  passUserToView
+}
+```
+
+Require yur middleware at the top of `server.js`:
+
+```js
+const middleware = require('./middleware')
+```
+
+Then, just under your middleware stack in `server.js`:
+
+```js
+app.use(middleware.passUserToView)
 ```
 
 · · · · · · · · · · · · · · · · · · · ·
@@ -3282,10 +3272,10 @@ touch ./views/recipes/show.ejs
 In `recipeController.js`, update the `res.send` in `getRecipeById` with:
 
 ```js
-res.render('./recipes/show.ejs', { user: req.session.user, recipe })
+res.render('./recipes/show.ejs', { recipe })
 ```
 
-You've got a conditional statement in the show page that ensures only the user who made the recipe can edit or delete it. In order for that to work, you have to pass the `session` object to compare the `_id` fields.
+You've got a conditional statement in the show page that ensures only the user who made the recipe can edit or delete it. In order for that to work, you have to be sure to have set up your `passUserToView` middleware in `server.js`.
 
 [📖 Back to Top](#-table-of-contents)
 
@@ -3456,13 +3446,13 @@ Then, create your stylesheet:
 touch ./public/style.css
 ```
 
-In order to host a *static* file in your Node environment, you need a line of code in your `server.js`. Just underneath your `const app = express()`, add:
+This is made possible by the `express.static()` middleware you added at the beginning:
 
 ```js
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, "public")))
 ```
 
-Now your project will be able to find and use your `style.css` file.
+Now your project should be able to find and use your `style.css` file.
 
 · · · · · · · · · · · · · · · · · · · ·
 
@@ -3612,7 +3602,8 @@ You can also view the deployed version [here](https://mongoose-recipes.fly.dev/)
 
 Deployed Version:
 - [mongoose-recipes.fly.dev](https://mongoose-recipes.fly.dev/)
-- [Deploy Your Own!](https://expressdeployment.fly.dev/)
+- [Deploy Your Own with Fly.io!](https://expressdeployment.fly.dev/)
+- [Deploy Your Own with Render!](https://expressdeployment.onrender.com/)
 
 Documentation:
 - [MongoDB Atlas](https://www.mongodb.com/atlas)
@@ -3624,7 +3615,7 @@ Documentation:
 - [method-override](https://www.npmjs.com/package/method-override)
 - [express-session](https://www.npmjs.com/package/express-session)
 - [bcrypt](https://www.npmjs.com/package/bcrypt)
-- [nodemon](https://www.npmjs.com/package/nodemon)
+- [connect-mongo](https://www.npmjs.com/package/connect-mongo)
 
 ERD Tools:
 - [Canva](http://www.canva.com)
