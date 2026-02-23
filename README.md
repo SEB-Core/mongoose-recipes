@@ -469,6 +469,13 @@ In `server.js`, just below your other requires...
 const db = require('./db')
 ```
 
+If dealing with MongoDB connection issues, add the lines below just above your `db` require:
+
+```js
+const dns = require('dns')
+dns.setServers(['8.8.8.8', '1.1.1.1'])
+```
+
 Now, you run your server and watch your database connection occur!
 
 ```sh
