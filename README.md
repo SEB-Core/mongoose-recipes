@@ -3170,6 +3170,14 @@ res.render('./auth/confirm.ejs', { user })
 
 A list of all recipes in the app.
 
+First, create a `recipes` directory in `views`.
+
+```sh
+mkdir ./views/recipes
+```
+
+Then, create a file to show all recipes.
+
 ```sh
 touch ./views/recipes/all.ejs
 ```
